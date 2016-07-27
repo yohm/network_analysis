@@ -1,0 +1,8 @@
+{
+  "NumNodes": 10000,
+  "NumEdges": 54242,
+  "AverageDegree": 10.8484,
+  "ClusteringCoefficient": 0.6546,
+  "AverageEdgeWeight": 260.492,
+  "AverageOverlap": 0.364831
+}
