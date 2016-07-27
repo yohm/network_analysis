@@ -36,9 +36,11 @@ So the input file looks like the following.
 ...
 ```
 
-# How to compile
+You can find a sample input file `sample/net.edg` in this repository.
 
-## Prerequisites
+# Usage
+
+## Compiling
 
 C++ boost library is required. Please install it on your system.
 If you are using MacOSX, just run
@@ -60,10 +62,10 @@ Since the makefile is very simple, you can edit it by yourself if you encountere
 
 ## Running
 
-Just specify the network file as an argument.
+Just run `run.sh` specifing the network file and output directory as arguments.
 
 ```
-./analyzer.out net.edg ./out
+./run.sh net.edg ./out
 ```
 
 Then you'll find the output files in the current directory.
@@ -84,6 +86,8 @@ For example, run
 ```
 ./plot/plot_all.sh ./out
 ```
+
+You'll find sample outputs in `sample` directory in thie repository.
 
 # LICENSE
 
