@@ -26,7 +26,7 @@ int main( int argc, char* argv[]) {
 
   std::ofstream dd("degree_distribution.dat");
   typedef std::pair<size_t, size_t> Freq;
-  BOOST_FOREACH(Freq f, network.DegreeDistribution() ) {
+  for(Freq f : network.DegreeDistribution() ) {
     dd << f.first << ' ' << f.second << std::endl;
   }
   dd.flush();
@@ -34,40 +34,40 @@ int main( int argc, char* argv[]) {
   typedef std::pair<double, size_t> DoubleSize;
   // double edge_weight_bin_size = 1.0;
   std::ofstream ewd("edge_weight_distribution.dat");
-  BOOST_FOREACH(DoubleSize f, network.EdgeWeightDistributionLogBin() ) {
+  for(DoubleSize f : network.EdgeWeightDistributionLogBin() ) {
     ewd << f.first << ' ' << f.second << std::endl;
   }
   ewd.flush();
 
   double strength_bin_size = 1.0;
   std::ofstream sd("strength_distribution.dat");
-  BOOST_FOREACH(DoubleSize f, network.StrengthDistribution(strength_bin_size)) {
+  for(DoubleSize f : network.StrengthDistribution(strength_bin_size)) {
     sd << f.first << ' ' << f.second << std::endl;
   }
   sd.flush();
 
   typedef std::pair<size_t, double> SizeDouble;
   std::ofstream cc_d("cc_degree_correlation.dat");
-  BOOST_FOREACH(SizeDouble f, network.CC_DegreeCorrelation() ) {
+  for(SizeDouble f : network.CC_DegreeCorrelation() ) {
     cc_d << f.first << ' ' << f.second << std::endl;
   }
   cc_d.flush();
 
   std::ofstream sdc("strength_degree_correlation.dat");
-  BOOST_FOREACH(SizeDouble f, network.StrengthDegreeCorrelation() ) {
+  for(SizeDouble f : network.StrengthDegreeCorrelation() ) {
     sdc << f.first << ' ' << f.second << std::endl;
   }
   sdc.flush();
 
   std::ofstream ndc("neighbor_degree_correlation.dat");
-  BOOST_FOREACH(SizeDouble f, network.NeighborDegreeCorrelation() ) {
+  for(SizeDouble f : network.NeighborDegreeCorrelation() ) {
     ndc << f.first << ' ' << f.second << std::endl;
   }
   ndc.flush();
 
   std::ofstream owc("overlap_weight_correlation.dat");
   typedef std::pair<double, double> DD;
-  BOOST_FOREACH(DD f, network.OverlapWeightCorrelationLogBin() ) {
+  for(DD f : network.OverlapWeightCorrelationLogBin() ) {
     owc << f.first << ' ' << f.second << std::endl;
   }
   owc.flush();

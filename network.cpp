@@ -21,7 +21,7 @@ void Network::LoadFile( std::ifstream& fin ) {
 }
 
 void Network::Print( std::ostream& out ) const {
-  BOOST_FOREACH(const Link& link, m_links) {
+  for(const Link& link : m_links) {
     out << link.m_node_id1 << ' ' << link.m_node_id2 << ' ' << link.m_weight << std::endl;
   }
 }
@@ -56,7 +56,7 @@ double Network::LocalCC(size_t idx) const {
 
 std::map<size_t, size_t> Network::DegreeDistribution() const {
   std::map<size_t, size_t> histo;
-  BOOST_FOREACH(const Node& node, m_nodes) {
+  for(const Node& node : m_nodes) {
     if( histo.find(node.Degree()) != histo.end() ) {
       histo[node.Degree()] += 1;
     } else {
@@ -68,7 +68,7 @@ std::map<size_t, size_t> Network::DegreeDistribution() const {
 
 double Network::AverageEdgeWeight() const {
   double total = 0.0;
-  BOOST_FOREACH(const Link& link, m_links) {
+  for(const Link& link : m_links) {
     total += link.m_weight;
   }
   return total / m_links.size();
@@ -87,11 +87,11 @@ double Network::LocalOverlap(size_t link_id) const {
   size_t j = m_links[link_id].m_node_id2;
 
   std::set<size_t> neighbors_i;
-  BOOST_FOREACH(const Edge& edge, m_nodes[i].m_edges) {
+  for(const Edge& edge : m_nodes[i].m_edges) {
     neighbors_i.insert( edge.m_node_id );
   }
   size_t num_common = 0;
-  BOOST_FOREACH(const Edge& edge, m_nodes[j].m_edges) {
+  for(const Edge& edge : m_nodes[j].m_edges) {
     size_t k = edge.m_node_id;
     if( neighbors_i.find(k) != neighbors_i.end() ) { num_common++; }
   }
@@ -104,7 +104,7 @@ double Network::LocalOverlap(size_t link_id) const {
 
 std::map<double, size_t> Network::EdgeWeightDistribution(double bin_size) const {
   std::map<int, size_t> histo;
-  BOOST_FOREACH(const Link& link, m_links) {
+  for(const Link& link : m_links) {
     int key = static_cast<int>(link.m_weight/bin_size + 0.5);
     if(histo.find(key) == histo.end() ) { histo[key] = 0; }
     histo[key] += 1;
@@ -113,7 +113,7 @@ std::map<double, size_t> Network::EdgeWeightDistribution(double bin_size) const 
   // convert to double
   std::map<double, size_t> histo_d;
   typedef std::pair<int, size_t> C;
-  BOOST_FOREACH(C key_val, histo) {
+  for(C key_val : histo) {
     double key_d = key_val.first * bin_size;
     histo_d[key_d] = key_val.second;
   }
@@ -143,7 +143,7 @@ std::map<double, size_t> Network::EdgeWeightDistributionLogBin() const {
       return 1;
     }
   };
-  BOOST_FOREACH(const Link& link, m_links) {
+  for(const Link& link : m_links) {
     int key = val_to_binidx(link.m_weight);
     if(histo.find(key) == histo.end() ) { histo[key] = 0; }
     histo[key] += 1;
@@ -152,7 +152,7 @@ std::map<double, size_t> Network::EdgeWeightDistributionLogBin() const {
   // convert to double
   std::map<double, size_t> histo_d;
   typedef std::pair<int, size_t> C;
-  BOOST_FOREACH(C key_val, histo) {
+  for(C key_val : histo) {
     double key_d = binidx_to_val(key_val.first);
     double bin_size = binidx_to_binsize(key_val.first);
     histo_d[key_d] = key_val.second / bin_size; 
@@ -162,7 +162,7 @@ std::map<double, size_t> Network::EdgeWeightDistributionLogBin() const {
 
 std::map<double, size_t> Network::StrengthDistribution(double bin_size) const {
   std::map<int, size_t> histo;
-  BOOST_FOREACH(const Node& node, m_nodes) {
+  for(const Node& node : m_nodes) {
     int key = static_cast<int>( node.Strength()/bin_size + 0.5 );
     if( histo.find(key) == histo.end() ) { histo[key] = 0; }
     histo[key] += 1;
@@ -171,7 +171,7 @@ std::map<double, size_t> Network::StrengthDistribution(double bin_size) const {
   // convert to double
   std::map<double, size_t> histo_d;
   typedef std::pair<int, size_t> C;
-  BOOST_FOREACH(C key_val, histo) {
+  for(C key_val : histo) {
     double key_d = key_val.first * bin_size;
     histo_d[key_d] = key_val.second;
   }
@@ -197,7 +197,7 @@ std::map<size_t, double> Network::NeighborDegreeCorrelation() const {
 
   typedef std::pair<size_t, size_t> C;
   std::map<size_t, double> neighbor_degree_average;
-  BOOST_FOREACH( C c, neighbor_degree_counts) {
+  for( C c : neighbor_degree_counts) {
     neighbor_degree_average[c.first] = neighbor_degree_total[ c.first ] / c.second;
   }
   return neighbor_degree_average;
@@ -207,7 +207,7 @@ double Network::AverageNeighborDegree(size_t i) const {
   const Node& node = m_nodes[i];
   double total = 0.0;
   if( node.m_edges.empty() ) { return 0.0; }
-  BOOST_FOREACH(const Edge& e, node.m_edges) {
+  for(const Edge& e : node.m_edges) {
     size_t neighbor_idx = e.m_node_id;
     total += static_cast<double>( m_nodes[neighbor_idx].Degree() );
   }
@@ -233,7 +233,7 @@ std::map<size_t, double> Network::CC_DegreeCorrelation() const {
 
   typedef std::pair<size_t, size_t> C;
   std::map<size_t, double> cc_average;
-  BOOST_FOREACH( C c, cc_counts) {
+  for( C c : cc_counts) {
     size_t k = c.first;
     cc_average[k] = cc_total[ k ] / c.second;
   }
@@ -243,7 +243,7 @@ std::map<size_t, double> Network::CC_DegreeCorrelation() const {
 std::map<size_t, double> Network::StrengthDegreeCorrelation() const {
   std::map<size_t, size_t> s_counts;
   std::map<size_t, double> s_total;
-  BOOST_FOREACH(const Node& node, m_nodes) {
+  for(const Node& node : m_nodes) {
     const size_t k = node.Degree();
     const double s = node.Strength();
     if( s_counts.find(k) == s_counts.end() ) { s_counts[k] = 0; s_total[k] = 0.0;}
@@ -253,7 +253,7 @@ std::map<size_t, double> Network::StrengthDegreeCorrelation() const {
 
   typedef std::pair<size_t, size_t> C;
   std::map<size_t, double> s_average;
-  BOOST_FOREACH( C k_counts_pair, s_counts) {
+  for( C k_counts_pair : s_counts) {
     size_t k = k_counts_pair.first;
     size_t count = k_counts_pair.second;
     s_average[k] = s_total[ k ] / count;
@@ -274,7 +274,7 @@ std::map<double, double> Network::OverlapWeightCorrelation(double bin_size) cons
 
   std::map<double, double> ret;
   typedef std::pair<int, size_t> C;
-  BOOST_FOREACH(C bin_idx_count, counts) {
+  for(C bin_idx_count : counts) {
     int bin_idx = bin_idx_count.first;
     ret[ bin_idx * bin_size ] = totals[bin_idx] / counts[bin_idx];
   }
@@ -308,7 +308,7 @@ std::map<double,double> Network::OverlapWeightCorrelationLogBin() const {
 
   std::map<double, double> ret;
   typedef std::pair<int, size_t> C;
-  BOOST_FOREACH(C bin_idx_count, counts) {
+  for(C bin_idx_count : counts) {
     int bin_idx = bin_idx_count.first;
     double v = binidx_to_val(bin_idx);
     ret[ v ] = totals[bin_idx] / counts[bin_idx];
@@ -405,14 +405,14 @@ std::vector<size_t> Network::PercolatedClusterSizeDistribution() const {
 
   // get cluster size distribution
   std::map<int, size_t> cluster_sizes;
-  BOOST_FOREACH(int id, cluster_ids) {
+  for(int id : cluster_ids) {
     if( cluster_sizes.find(id) == cluster_sizes.end() ) { cluster_sizes[id] = 0; }
     cluster_sizes[id] += 1;
   }
 
   std::vector<size_t> sizes;
   typedef std::pair<int, size_t> IntSize;
-  BOOST_FOREACH(IntSize is, cluster_sizes) { sizes.push_back( is.second ); }
+  for(IntSize is : cluster_sizes) { sizes.push_back( is.second ); }
 
   return sizes;
 }
@@ -424,7 +424,7 @@ void Network::AnalyzePercolation(double& r_lcc, double& susceptibility) const {
   r_lcc = (1.0 * sizes.back()) / m_nodes.size(); // *(sizes.end()--);
   sizes.pop_back(); // remove the largest cluster
   double total = 0.0;
-  BOOST_FOREACH(size_t cluster_size, sizes) {
+  for(size_t cluster_size : sizes) {
     total += cluster_size * cluster_size;
   }
   susceptibility = total / m_nodes.size();
@@ -440,7 +440,7 @@ void Network::SearchConnected(size_t target_node, size_t parent_id, std::vector<
   while( ! to_be_searched.empty() ) {
     size_t searching = to_be_searched.front();
     to_be_searched.pop();
-    BOOST_FOREACH(const Edge& edge, m_nodes.at(searching).m_edges) {
+    for(const Edge& edge : m_nodes.at(searching).m_edges) {
       size_t child = edge.m_node_id;
       if( cluster_ids.at(child) == -1 ) {
         cluster_ids.at(child) = parent_id;
