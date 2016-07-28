@@ -112,8 +112,7 @@ std::map<double, size_t> Network::EdgeWeightDistribution(double bin_size) const 
 
   // convert to double
   std::map<double, size_t> histo_d;
-  typedef std::pair<int, size_t> C;
-  for(C key_val : histo) {
+  for(auto key_val : histo) {
     double key_d = key_val.first * bin_size;
     histo_d[key_d] = key_val.second;
   }
@@ -151,8 +150,7 @@ std::map<double, size_t> Network::EdgeWeightDistributionLogBin() const {
 
   // convert to double
   std::map<double, size_t> histo_d;
-  typedef std::pair<int, size_t> C;
-  for(C key_val : histo) {
+  for(auto key_val : histo) {
     double key_d = binidx_to_val(key_val.first);
     double bin_size = binidx_to_binsize(key_val.first);
     histo_d[key_d] = key_val.second / bin_size; 
@@ -170,8 +168,7 @@ std::map<double, size_t> Network::StrengthDistribution(double bin_size) const {
 
   // convert to double
   std::map<double, size_t> histo_d;
-  typedef std::pair<int, size_t> C;
-  for(C key_val : histo) {
+  for(auto key_val : histo) {
     double key_d = key_val.first * bin_size;
     histo_d[key_d] = key_val.second;
   }
@@ -195,9 +192,8 @@ std::map<size_t, double> Network::NeighborDegreeCorrelation() const {
     }
   }
 
-  typedef std::pair<size_t, size_t> C;
   std::map<size_t, double> neighbor_degree_average;
-  for( C c : neighbor_degree_counts) {
+  for( auto c : neighbor_degree_counts) {
     neighbor_degree_average[c.first] = neighbor_degree_total[ c.first ] / c.second;
   }
   return neighbor_degree_average;
@@ -231,9 +227,8 @@ std::map<size_t, double> Network::CC_DegreeCorrelation() const {
     }
   }
 
-  typedef std::pair<size_t, size_t> C;
   std::map<size_t, double> cc_average;
-  for( C c : cc_counts) {
+  for( auto c : cc_counts) {
     size_t k = c.first;
     cc_average[k] = cc_total[ k ] / c.second;
   }
@@ -251,9 +246,8 @@ std::map<size_t, double> Network::StrengthDegreeCorrelation() const {
     s_total[k] += s;
   }
 
-  typedef std::pair<size_t, size_t> C;
   std::map<size_t, double> s_average;
-  for( C k_counts_pair : s_counts) {
+  for( auto k_counts_pair : s_counts) {
     size_t k = k_counts_pair.first;
     size_t count = k_counts_pair.second;
     s_average[k] = s_total[ k ] / count;
@@ -273,8 +267,7 @@ std::map<double, double> Network::OverlapWeightCorrelation(double bin_size) cons
   }
 
   std::map<double, double> ret;
-  typedef std::pair<int, size_t> C;
-  for(C bin_idx_count : counts) {
+  for( auto bin_idx_count : counts) {
     int bin_idx = bin_idx_count.first;
     ret[ bin_idx * bin_size ] = totals[bin_idx] / counts[bin_idx];
   }
@@ -307,8 +300,7 @@ std::map<double,double> Network::OverlapWeightCorrelationLogBin() const {
   }
 
   std::map<double, double> ret;
-  typedef std::pair<int, size_t> C;
-  for(C bin_idx_count : counts) {
+  for(auto bin_idx_count : counts) {
     int bin_idx = bin_idx_count.first;
     double v = binidx_to_val(bin_idx);
     ret[ v ] = totals[bin_idx] / counts[bin_idx];
@@ -411,8 +403,7 @@ std::vector<size_t> Network::PercolatedClusterSizeDistribution() const {
   }
 
   std::vector<size_t> sizes;
-  typedef std::pair<int, size_t> IntSize;
-  for(IntSize is : cluster_sizes) { sizes.push_back( is.second ); }
+  for(auto is : cluster_sizes) { sizes.push_back( is.second ); }
 
   return sizes;
 }
