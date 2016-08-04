@@ -15,49 +15,45 @@ int main( int argc, char* argv[]) {
   network.LoadFile( fin );
 
   std::ofstream dd("degree_distribution.dat");
-  typedef std::pair<size_t, size_t> Freq;
-  for(Freq f : network.DegreeDistribution() ) {
+  for(const auto& f : network.DegreeDistribution() ) {
     dd << f.first << ' ' << f.second << std::endl;
   }
   dd.flush();
 
-  typedef std::pair<double, size_t> DoubleSize;
   // double edge_weight_bin_size = 1.0;
   std::ofstream ewd("edge_weight_distribution.dat");
-  for(DoubleSize f : network.EdgeWeightDistributionLogBin() ) {
+  for(const auto& f : network.EdgeWeightDistributionLogBin() ) {
     ewd << f.first << ' ' << f.second << std::endl;
   }
   ewd.flush();
 
   double strength_bin_size = 1.0;
   std::ofstream sd("strength_distribution.dat");
-  for(DoubleSize f : network.StrengthDistribution(strength_bin_size)) {
+  for(const auto& f : network.StrengthDistribution(strength_bin_size)) {
     sd << f.first << ' ' << f.second << std::endl;
   }
   sd.flush();
 
-  typedef std::pair<size_t, double> SizeDouble;
   std::ofstream cc_d("cc_degree_correlation.dat");
-  for(SizeDouble f : network.CC_DegreeCorrelation() ) {
+  for(const auto& f : network.CC_DegreeCorrelation() ) {
     cc_d << f.first << ' ' << f.second << std::endl;
   }
   cc_d.flush();
 
   std::ofstream sdc("strength_degree_correlation.dat");
-  for(SizeDouble f : network.StrengthDegreeCorrelation() ) {
+  for(const auto& f : network.StrengthDegreeCorrelation() ) {
     sdc << f.first << ' ' << f.second << std::endl;
   }
   sdc.flush();
 
   std::ofstream ndc("neighbor_degree_correlation.dat");
-  for(SizeDouble f : network.NeighborDegreeCorrelation() ) {
+  for(const auto& f : network.NeighborDegreeCorrelation() ) {
     ndc << f.first << ' ' << f.second << std::endl;
   }
   ndc.flush();
 
   std::ofstream owc("overlap_weight_correlation.dat");
-  typedef std::pair<double, double> DD;
-  for(DD f : network.OverlapWeightCorrelationLogBin() ) {
+  for(const auto& f : network.OverlapWeightCorrelationLogBin() ) {
     owc << f.first << ' ' << f.second << std::endl;
   }
   owc.flush();
