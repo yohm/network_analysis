@@ -315,7 +315,7 @@ void Network::SortLinkByWeight() {
   }
 }
 
-void Network::AnalyzeLinkRemovalPercolationVariableAccuracy(double df, double d_R, std::ostream& os) {
+std::pair<double,double> Network::AnalyzeLinkRemovalPercolationVariableAccuracy(double df, double d_R, std::ostream& os) {
   typedef std::tuple<double,double,double,double> perc_result_t;  // R_lcc_asc, susc_asc, R_lcc_desc, susc_desc
 
   auto PercolationAt = [&](double f)->perc_result_t {
@@ -351,6 +351,30 @@ void Network::AnalyzeLinkRemovalPercolationVariableAccuracy(double df, double d_
     investigate_between(f, f_next, d_R);
   }
 
+  // find fc for ascending and descending orders
+  std::pair<double, double> ret;
+  {
+    double f_c_asc = 0.0;
+    double max_sus_asc = 0.0;
+    double f_c_dsc = 0.0;
+    double max_sus_dsc = 0.0;
+    for( const auto& keyval: results ) {
+      double f = keyval.first;
+      double sus_asc = std::get<1>(keyval.second);
+      if( sus_asc > max_sus_asc ) {
+        f_c_asc = f;
+        max_sus_asc = sus_asc;
+      }
+      double sus_dsc = std::get<3>(keyval.second);
+      if( sus_dsc > max_sus_dsc ) {
+        f_c_dsc = f;
+        max_sus_dsc = sus_dsc;
+      }
+    }
+    ret.first = f_c_asc;
+    ret.second = f_c_dsc;
+  }
+
   for( const auto& keyval : results ) {
     perc_result_t r = keyval.second;
     double f = keyval.first;
@@ -361,6 +385,8 @@ void Network::AnalyzeLinkRemovalPercolationVariableAccuracy(double df, double d_
        << std::get<3>(r) << ' '
        << (1.0-f) * AverageDegree() << std::endl;
   }
+
+  return ret;
 }
 
 void Network::AnalyzeLinkRemovalPercolation(double f, bool weak_link_removal, double& r_lcc, double& susceptibility) {

@@ -13,16 +13,6 @@ int main( int argc, char* argv[]) {
   Network network;
   std::ifstream fin(argv[1]);
   network.LoadFile( fin );
-  // network.Print();
-  std::ofstream fout("_output.json");
-  fout << "{" << std::endl;
-  fout << "  \"NumNodes\": " << network.NumNodes() << ',' << std::endl;
-  fout << "  \"NumEdges\": " << network.NumEdges() << ',' << std::endl;
-  fout << "  \"AverageDegree\": " << network.AverageDegree() << ',' << std::endl;
-  fout << "  \"ClusteringCoefficient\": " << network.ClusteringCoefficient() << ',' << std::endl;
-  fout << "  \"AverageEdgeWeight\": " << network.AverageEdgeWeight() << ',' << std::endl;
-  fout << "  \"AverageOverlap\": " << network.AverageOverlap() << std::endl;
-  fout << "}" << std::endl;
 
   std::ofstream dd("degree_distribution.dat");
   typedef std::pair<size_t, size_t> Freq;
@@ -74,8 +64,20 @@ int main( int argc, char* argv[]) {
 
   std::ofstream lrp("link_removal_percolation.dat");
   lrp << "#fraction  weak_link_removal_lcc susceptibility strong_link_removal_lcc susceptibility" << std::endl;
-  network.AnalyzeLinkRemovalPercolationVariableAccuracy( 0.02, 0.02, lrp );
+  std::pair<double,double> fc = network.AnalyzeLinkRemovalPercolationVariableAccuracy( 0.02, 0.02, lrp );
   lrp.flush();
+
+  std::ofstream fout("_output.json");
+  fout << "{" << std::endl;
+  fout << "  \"NumNodes\": " << network.NumNodes() << ',' << std::endl;
+  fout << "  \"NumEdges\": " << network.NumEdges() << ',' << std::endl;
+  fout << "  \"AverageDegree\": " << network.AverageDegree() << ',' << std::endl;
+  fout << "  \"ClusteringCoefficient\": " << network.ClusteringCoefficient() << ',' << std::endl;
+  fout << "  \"AverageEdgeWeight\": " << network.AverageEdgeWeight() << ',' << std::endl;
+  fout << "  \"AverageOverlap\": " << network.AverageOverlap() << ',' << std::endl;
+  fout << "  \"Fc_Ascending\": " << fc.first << ',' << std::endl;
+  fout << "  \"Fc_Descending\": " << fc.second << std::endl;
+  fout << "}" << std::endl;
 
   return 0;
 }

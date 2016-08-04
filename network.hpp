@@ -32,7 +32,15 @@ public:
   std::map<size_t, double> NeighborDegreeCorrelation() const; // returns k-k_{n.n.} distribution
   std::map<double, double> OverlapWeightCorrelation(double bin_size) const; // returns O(w)
   std::map<double, double> OverlapWeightCorrelationLogBin() const; // returns O(w)
-  void AnalyzeLinkRemovalPercolationVariableAccuracy(double df = 0.01, double d_R = 0.02, std::ostream& os = std::cout);
+
+  std::pair<double, double> AnalyzeLinkRemovalPercolationVariableAccuracy(double df = 0.01, double d_R = 0.02, std::ostream& os = std::cout);
+  // conduct percolation analysis with a variable resolution of f.
+  // By defualt, R_LCC and susceptibility are calculated with the resolution df.
+  // If the difference of R_LCC between two successive points are larger than d_R, then the sampling points are divided into two.
+  // We repeat this process until we have sufficiently small d_R.
+  // The function returns the transition points for ascending and descending orders as a return value,
+  // where transition points are estimated as the point having maximum susceptibility.
+
   void AnalyzeLinkRemovalPercolation(double f, bool weak_link_removal, double& r_lcc, double& susceptibility);
   Network* MakeFilteredNetwork(double f, bool weak_link_removal);
   std::vector<size_t> PercolatedClusterSizeDistribution() const;
