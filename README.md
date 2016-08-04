@@ -51,10 +51,10 @@ brew install boost
 
 Or you can just download the file from [the boost official page](http://www.boost.org/) since we need header files only.
 
-To compile, just run make specifying the path of the boost library by setting BOOST_PATH environment variable like
+Run `make` to compile the program. Specify `CPP` or `INCLUDE` environment variables if necessary.
 
 ```
-BOOST_PATH=/usr/local/include make
+env CXX=g++ INCLUDE=-I/usr/local/include make
 ```
 
 You will find `analyzer.out`.
