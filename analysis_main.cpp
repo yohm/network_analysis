@@ -83,6 +83,7 @@ int main( int argc, char* argv[]) {
   fout << "  \"NumNodes\": " << network.NumNodes() << ',' << std::endl;
   fout << "  \"NumEdges\": " << network.NumEdges() << ',' << std::endl;
   fout << "  \"AverageDegree\": " << network.AverageDegree() << ',' << std::endl;
+  fout << "  \"Assortativity\": " << network.PPC_k_knn() << ',' << std::endl;
   fout << "  \"ArgMax_Pk\": " << ArgMax( degree_distribution ) << ',' << std::endl;
   fout << "  \"ClusteringCoefficient\": " << network.ClusteringCoefficient() << ',' << std::endl;
   fout << "  \"AverageEdgeWeight\": " << network.AverageEdgeWeight() << ',' << std::endl;

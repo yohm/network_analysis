@@ -22,6 +22,7 @@ public:
   double AverageDegree() const { return (2.0 * NumEdges()) / NumNodes(); }
   double AverageEdgeWeight() const;
   double AverageOverlap() const;
+  double PPC_k_knn() const;  // Pearson correlation coefficient between degrees of neighboring nodes, i.e. assortativity
   std::map<size_t, size_t> DegreeDistribution() const;  // returns a map of degree-frequency
   std::map<double, size_t> EdgeWeightDistribution(double bin_size) const; // returns a map of w_{ij}-frequency
   std::map<double, size_t> EdgeWeightDistributionLogBin() const; // returns a map of w_{ij}-frequency
@@ -104,6 +105,7 @@ protected:
   double LocalOverlap(size_t link_id) const;
   double AverageNeighborDegree(size_t i) const;
   void SearchConnected(size_t target_node, size_t parent_id, std::vector<int>& cluster_ids) const;
+  double PPC( const std::vector<double>& xs, const std::vector<double>& ys ) const;
 };
 
 #endif

@@ -102,6 +102,49 @@ double Network::LocalOverlap(size_t link_id) const {
   return static_cast<double>(num_common)/(ki + kj - 2 - num_common);
 }
 
+double Network::PPC( const std::vector<double>& xs, const std::vector<double>& ys ) const {
+
+  auto sum = []( const std::vector<double>& a ) {
+    double ret = 0.0;
+    for( double x: a ) { ret += x; }
+    return ret;
+  };
+  auto square_sum = []( const std::vector<double>& a ) {
+    double ret = 0.0;
+    for( double x: a ) { ret += x*x; }
+    return ret;
+  };
+
+  double xsum = sum( xs );
+  double ysum = sum( ys );
+  double x_square_sum = square_sum( xs );
+  double y_square_sum = square_sum( ys );
+  double product_sum = 0.0;
+  for( size_t i=0; i<xs.size(); i++) {
+    product_sum += xs[i] * ys[i];
+  }
+  double n = static_cast<double>( xs.size() );
+  double numerator = product_sum - (xsum*ysum/n);
+  double denominator = (x_square_sum - xsum*xsum/n) * (y_square_sum - ysum*ysum/n);
+  denominator = std::sqrt( denominator );
+  if( denominator == 0.0 ) { return 0.0; }
+  return numerator / denominator;
+}
+
+double Network::PPC_k_knn() const {
+  std::vector<double> xs;
+  std::vector<double> ys;
+
+  for( const Link& l : m_links ) {
+    size_t k1 = m_nodes[ l.m_node_id1 ].Degree();
+    size_t k2 = m_nodes[ l.m_node_id2 ].Degree();
+    xs.push_back( static_cast<double>(k1) );
+    ys.push_back( static_cast<double>(k2) );
+  }
+
+  return PPC( xs, ys );
+}
+
 std::map<double, size_t> Network::EdgeWeightDistribution(double bin_size) const {
   std::map<int, size_t> histo;
   for(const Link& link : m_links) {
