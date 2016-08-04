@@ -4,6 +4,20 @@
 #include <boost/lexical_cast.hpp>
 #include "network.hpp"
 
+size_t ArgMax( std::map<size_t,size_t> map ) {
+  size_t max_key = map.begin()->first;
+  size_t max_val = map.begin()->second;
+
+  for( const auto& pair: map ) {
+    size_t val = pair.second;
+    if( val > max_val ) {
+      max_key = pair.first;
+      max_val = val;
+    }
+  }
+  return max_key;
+}
+
 int main( int argc, char* argv[]) {
   if(argc != 2) {
     std::cerr << "Usage : ./main.out <edge_file>" << std::endl;
@@ -15,7 +29,8 @@ int main( int argc, char* argv[]) {
   network.LoadFile( fin );
 
   std::ofstream dd("degree_distribution.dat");
-  for(const auto& f : network.DegreeDistribution() ) {
+  const auto degree_distribution = network.DegreeDistribution();
+  for(const auto& f : degree_distribution ) {
     dd << f.first << ' ' << f.second << std::endl;
   }
   dd.flush();
@@ -68,6 +83,7 @@ int main( int argc, char* argv[]) {
   fout << "  \"NumNodes\": " << network.NumNodes() << ',' << std::endl;
   fout << "  \"NumEdges\": " << network.NumEdges() << ',' << std::endl;
   fout << "  \"AverageDegree\": " << network.AverageDegree() << ',' << std::endl;
+  fout << "  \"ArgMax_Pk\": " << ArgMax( degree_distribution ) << ',' << std::endl;
   fout << "  \"ClusteringCoefficient\": " << network.ClusteringCoefficient() << ',' << std::endl;
   fout << "  \"AverageEdgeWeight\": " << network.AverageEdgeWeight() << ',' << std::endl;
   fout << "  \"AverageOverlap\": " << network.AverageOverlap() << ',' << std::endl;

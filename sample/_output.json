@@ -2,7 +2,10 @@
   "NumNodes": 10000,
   "NumEdges": 54242,
   "AverageDegree": 10.8484,
+  "ArgMax_Pk": 6,
   "ClusteringCoefficient": 0.6546,
   "AverageEdgeWeight": 260.492,
-  "AverageOverlap": 0.364831
+  "AverageOverlap": 0.364831,
+  "Fc_Ascending": 0.52625,
+  "Fc_Descending": 0.918984
 }
