@@ -76,10 +76,10 @@ If you specify the second argument, output files are generated in that directory
 We prepared gnuplot scripts to make plots.
 
 ```
-./plot/plot_all.sh [result directory]
+./plot/plot_all.sh <result directory> [figure directory]
 ```
 
-The argument specifies the output directory. Please specify the directories where the result files are generated.
+The first argument specifies the output directory. Please specify the directories where the result files are generated.
 In the same directory, figure files are generated.
 For example, run
 
@@ -87,7 +87,21 @@ For example, run
 ./plot/plot_all.sh ./out
 ```
 
-You'll find sample outputs in `sample` directory in thie repository.
+You'll find sample outputs in `sample` directory in this repository.
+
+## Calculating ensemble averages
+
+If you have several network files, we can calculate ensemble average of network statistics.
+The procedure would be like the following.
+
+```
+./run.sh 1.edg ./1_out  # we calculate network properties for each network
+./run.sh 2.edg ./2_out
+./run.sh 3.edg ./3_out
+./run.sh 4.edg ./4_out
+...
+./ensemble/run_averaging.sh '[1-9]_out' output  # This will calculate the ensemble average over all data files in the specified directories 
+```
 
 # LICENSE
 
