@@ -22,16 +22,20 @@ public:
   double AverageDegree() const { return (2.0 * NumEdges()) / NumNodes(); }
   double AverageEdgeWeight() const;
   double AverageOverlap() const;
+  double PPC_k_knn() const;  // Pearson correlation coefficient between degrees of neighboring nodes, i.e. assortativity
   std::map<size_t, size_t> DegreeDistribution() const;  // returns a map of degree-frequency
   std::map<double, size_t> EdgeWeightDistribution(double bin_size) const; // returns a map of w_{ij}-frequency
   std::map<double, size_t> EdgeWeightDistributionLogBin() const; // returns a map of w_{ij}-frequency
   std::map<double, size_t> StrengthDistribution(double bin_size) const; // returns a map of s_i-frequency
   double ClusteringCoefficient() const;
   std::map<size_t, double> CC_DegreeCorrelation() const; // returns CC(k)
+  double PPC_C_k() const; // Pearson correlation coefficient between C_i and k_i. Nodes with degree < 2 are excluded.
   std::map<size_t, double> StrengthDegreeCorrelation() const; // returns s(k)
+  double PPC_s_k() const; // Pearson correlation coefficient between s_i and k_i.
   std::map<size_t, double> NeighborDegreeCorrelation() const; // returns k-k_{n.n.} distribution
   std::map<double, double> OverlapWeightCorrelation(double bin_size) const; // returns O(w)
   std::map<double, double> OverlapWeightCorrelationLogBin() const; // returns O(w)
+  double PPC_O_w() const; // Pearson correlation coefficient between overlap and weight.
 
   std::pair<double, double> AnalyzeLinkRemovalPercolationVariableAccuracy(double df = 0.01, double d_R = 0.02, std::ostream& os = std::cout);
   // conduct percolation analysis with a variable resolution of f.
@@ -104,6 +108,7 @@ protected:
   double LocalOverlap(size_t link_id) const;
   double AverageNeighborDegree(size_t i) const;
   void SearchConnected(size_t target_node, size_t parent_id, std::vector<int>& cluster_ids) const;
+  double PPC( const std::vector<double>& xs, const std::vector<double>& ys ) const;
 };
 
 #endif
