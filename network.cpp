@@ -145,6 +145,21 @@ double Network::PPC_k_knn() const {
   return PPC( xs, ys );
 }
 
+double Network::PPC_C_k() const {
+  std::vector<double> xs;
+  std::vector<double> ys;
+
+  for( const Node& n: m_nodes ) {
+    size_t k = n.Degree();
+    double c = LocalCC( n.m_id );
+    if( k < 2 ) { continue; }
+    xs.push_back( static_cast<double>(k) );
+    ys.push_back( c );
+  }
+
+  return PPC( xs, ys );
+}
+
 std::map<double, size_t> Network::EdgeWeightDistribution(double bin_size) const {
   std::map<int, size_t> histo;
   for(const Link& link : m_links) {
