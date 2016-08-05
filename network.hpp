@@ -35,6 +35,7 @@ public:
   std::map<size_t, double> NeighborDegreeCorrelation() const; // returns k-k_{n.n.} distribution
   std::map<double, double> OverlapWeightCorrelation(double bin_size) const; // returns O(w)
   std::map<double, double> OverlapWeightCorrelationLogBin() const; // returns O(w)
+  double PPC_O_w() const; // Pearson correlation coefficient between overlap and weight.
 
   std::pair<double, double> AnalyzeLinkRemovalPercolationVariableAccuracy(double df = 0.01, double d_R = 0.02, std::ostream& os = std::cout);
   // conduct percolation analysis with a variable resolution of f.

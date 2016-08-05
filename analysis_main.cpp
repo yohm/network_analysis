@@ -90,6 +90,7 @@ int main( int argc, char* argv[]) {
   fout << "  \"AverageEdgeWeight\": " << network.AverageEdgeWeight() << ',' << std::endl;
   fout << "  \"PPC_s_k\": " << network.PPC_s_k() << ',' << std::endl;
   fout << "  \"AverageOverlap\": " << network.AverageOverlap() << ',' << std::endl;
+  fout << "  \"PPC_O_w\": " << network.PPC_O_w() << ',' << std::endl;
   fout << "  \"Fc_Ascending\": " << fc.first << ',' << std::endl;
   fout << "  \"Fc_Descending\": " << fc.second << std::endl;
   fout << "}" << std::endl;

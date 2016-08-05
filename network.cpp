@@ -173,6 +173,19 @@ double Network::PPC_s_k() const {
   return PPC( xs, ys );
 }
 
+double Network::PPC_O_w() const {
+  std::vector<double> xs;
+  std::vector<double> ys;
+
+  for( size_t i=0; i < m_links.size(); i++) {
+    double o = LocalOverlap(i);
+    double w = m_links[i].m_weight;
+    xs.push_back( w );
+    ys.push_back( o );
+  }
+  return PPC( xs, ys );
+}
+
 std::map<double, size_t> Network::EdgeWeightDistribution(double bin_size) const {
   std::map<int, size_t> histo;
   for(const Link& link : m_links) {
