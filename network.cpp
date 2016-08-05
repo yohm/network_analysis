@@ -160,6 +160,19 @@ double Network::PPC_C_k() const {
   return PPC( xs, ys );
 }
 
+double Network::PPC_s_k() const {
+  std::vector<double> xs;
+  std::vector<double> ys;
+
+  for( const Node& n: m_nodes ) {
+    size_t k = n.Degree();
+    double s = n.Strength();
+    xs.push_back( static_cast<double>(k) );
+    ys.push_back( s );
+  }
+  return PPC( xs, ys );
+}
+
 std::map<double, size_t> Network::EdgeWeightDistribution(double bin_size) const {
   std::map<int, size_t> histo;
   for(const Link& link : m_links) {

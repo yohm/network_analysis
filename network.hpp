@@ -31,6 +31,7 @@ public:
   std::map<size_t, double> CC_DegreeCorrelation() const; // returns CC(k)
   double PPC_C_k() const; // Pearson correlation coefficient between C_i and k_i. Nodes with degree < 2 are excluded.
   std::map<size_t, double> StrengthDegreeCorrelation() const; // returns s(k)
+  double PPC_s_k() const; // Pearson correlation coefficient between s_i and k_i.
   std::map<size_t, double> NeighborDegreeCorrelation() const; // returns k-k_{n.n.} distribution
   std::map<double, double> OverlapWeightCorrelation(double bin_size) const; // returns O(w)
   std::map<double, double> OverlapWeightCorrelationLogBin() const; // returns O(w)

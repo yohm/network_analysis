@@ -88,6 +88,7 @@ int main( int argc, char* argv[]) {
   fout << "  \"ClusteringCoefficient\": " << network.ClusteringCoefficient() << ',' << std::endl;
   fout << "  \"PPC_C_k\": " << network.PPC_C_k() << ',' << std::endl;
   fout << "  \"AverageEdgeWeight\": " << network.AverageEdgeWeight() << ',' << std::endl;
+  fout << "  \"PPC_s_k\": " << network.PPC_s_k() << ',' << std::endl;
   fout << "  \"AverageOverlap\": " << network.AverageOverlap() << ',' << std::endl;
   fout << "  \"Fc_Ascending\": " << fc.first << ',' << std::endl;
   fout << "  \"Fc_Descending\": " << fc.second << std::endl;
