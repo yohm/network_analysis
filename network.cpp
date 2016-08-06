@@ -18,6 +18,21 @@ void Network::LoadFile( std::ifstream& fin ) {
   for( size_t i=0; i < m_nodes.size(); i++) {
     m_nodes[i].m_id = i;
   }
+  ClearCache();
+}
+
+void Network::CalculateOverlaps() {
+  m_overlap_cache.resize( m_links.size() );
+  for( size_t i=0; i < m_links.size(); i++) {
+    m_overlap_cache[i] = LocalOverlap(i);
+  }
+}
+
+void Network::CalculateLocalCCs() {
+  m_local_cc_cache.resize( m_nodes.size() );
+  for( size_t i=0; i < m_nodes.size(); i++) {
+    m_local_cc_cache[i] = LocalCC(i);
+  }
 }
 
 void Network::Print( std::ostream& out ) const {
@@ -31,9 +46,13 @@ size_t Network::NumEdges() const {
 }
 
 double Network::ClusteringCoefficient() const {
+  if( m_local_cc_cache.empty() ) {
+    std::cerr << "You must call CalculateLocalCCs() before calling this function." << std::endl;
+    throw 1;
+  }
   double total = 0.0;
-  for( size_t i = 0; i < m_nodes.size(); ++i) {
-    total += LocalCC(i);
+  for( size_t i = 0; i < m_local_cc_cache.size(); ++i) {
+    total += m_local_cc_cache[i];
   }
   return total / m_nodes.size();
 }
@@ -75,9 +94,13 @@ double Network::AverageEdgeWeight() const {
 }
 
 double Network::AverageOverlap() const {
+  if( m_overlap_cache.empty() ) {
+    std::cerr << "You must call CalculateOverlaps() before calling this function." << std::endl;
+    throw 1;
+  }
   double total = 0.0;
   for(size_t i = 0; i < m_links.size(); ++i) {
-    total += LocalOverlap(i);
+    total += m_overlap_cache[i];
   }
   return total / m_links.size();
 }
@@ -146,12 +169,16 @@ double Network::PPC_k_knn() const {
 }
 
 double Network::PPC_C_k() const {
+  if( m_local_cc_cache.empty() ) {
+    std::cerr << "You must call CalculateLocalCCs() before calling this function." << std::endl;
+    throw 1;
+  }
   std::vector<double> xs;
   std::vector<double> ys;
 
   for( const Node& n: m_nodes ) {
     size_t k = n.Degree();
-    double c = LocalCC( n.m_id );
+    double c = m_local_cc_cache[n.m_id];
     if( k < 2 ) { continue; }
     xs.push_back( static_cast<double>(k) );
     ys.push_back( c );
@@ -174,11 +201,15 @@ double Network::PPC_s_k() const {
 }
 
 double Network::PPC_O_w() const {
+  if( m_overlap_cache.empty() ) {
+    std::cerr << "You must call CalculateOverlaps() before calling this function." << std::endl;
+    throw 1;
+  }
   std::vector<double> xs;
   std::vector<double> ys;
 
   for( size_t i=0; i < m_links.size(); i++) {
-    double o = LocalOverlap(i);
+    double o = m_overlap_cache[i];
     double w = m_links[i].m_weight;
     xs.push_back( w );
     ys.push_back( o );
@@ -295,13 +326,17 @@ double Network::AverageNeighborDegree(size_t i) const {
 }
 
 std::map<size_t, double> Network::CC_DegreeCorrelation() const {
+  if( m_local_cc_cache.empty() ) {
+    std::cerr << "You must call CalculateLocalCCs() before calling this function." << std::endl;
+    throw 1;
+  }
   std::map<size_t, size_t> cc_counts;
   std::map<size_t, double> cc_total;
   for(size_t i = 0; i < m_nodes.size(); ++i) {
     const Node& node = m_nodes[i];
     const size_t k = node.Degree();
     if( k == 0 ) { continue; }
-    const double lcc = LocalCC(i);
+    const double lcc = m_local_cc_cache[i];
     if( cc_counts.find(k) != cc_counts.end() ) {
       cc_counts[ k ] += 1;
       cc_total[ k ] += lcc;
@@ -340,6 +375,10 @@ std::map<size_t, double> Network::StrengthDegreeCorrelation() const {
 }
 
 std::map<double, double> Network::OverlapWeightCorrelation(double bin_size) const {
+  if( m_overlap_cache.empty() ) {
+    std::cerr << "You must call CalculateOverlaps() before calling this function." << std::endl;
+    throw 1;
+  }
   std::map<int, size_t> counts;
   std::map<int, double> totals;
   for(size_t i = 0; i < m_links.size(); ++i) {
@@ -347,7 +386,7 @@ std::map<double, double> Network::OverlapWeightCorrelation(double bin_size) cons
     int bin_idx = static_cast<int>(link.m_weight / bin_size + 0.5);
     if( counts.find(bin_idx) == counts.end() ) { counts[bin_idx] = 0; totals[bin_idx] = 0.0; }
     counts[bin_idx] += 1;
-    totals[bin_idx] += LocalOverlap(i);
+    totals[bin_idx] += m_overlap_cache[i];
   }
 
   std::map<double, double> ret;
@@ -359,6 +398,10 @@ std::map<double, double> Network::OverlapWeightCorrelation(double bin_size) cons
 }
 
 std::map<double,double> Network::OverlapWeightCorrelationLogBin() const {
+  if( m_overlap_cache.empty() ) {
+    std::cerr << "You must call CalculateOverlaps() before calling this function." << std::endl;
+    throw 1;
+  }
   std::map<int, int> counts;
   std::map<int, double> totals;
   auto val_to_binidx = [](double weight)->int {
@@ -380,7 +423,7 @@ std::map<double,double> Network::OverlapWeightCorrelationLogBin() const {
     int bin_idx = val_to_binidx(link.m_weight);
     if( counts.find(bin_idx) == counts.end() ) { counts[bin_idx] = 0; totals[bin_idx] = 0.0; }
     counts[bin_idx] += 1;
-    totals[bin_idx] += LocalOverlap(i);
+    totals[bin_idx] += m_overlap_cache[i];
   }
 
   std::map<double, double> ret;
@@ -395,7 +438,7 @@ std::map<double,double> Network::OverlapWeightCorrelationLogBin() const {
 void Network::SortLinkByWeight() {
   if( !m_is_sorted_by_weight ) {
     std::sort(m_links.begin(), m_links.end(), compareLinkByWeight);
-    m_is_sorted_by_weight = true;
+    ClearCache();
   }
 }
 

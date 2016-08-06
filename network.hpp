@@ -17,6 +17,8 @@ public:
   ~Network() {};
   void LoadFile( std::ifstream& fin );
   void Print( std::ostream& out = std::cerr ) const;
+  void CalculateOverlaps();  // this function must be called prior to AverageOverlap/OverlapWeightCorrelation/OverlapWeightCorrelationLogBin/PPC_O_w.
+  void CalculateLocalCCs();  // this function must be called prior to ClusteringCoefficient/CC_DegreeCorrelation/PPC_C_k.
   size_t NumNodes() const { return m_nodes.size(); }
   size_t NumEdges() const;
   double AverageDegree() const { return (2.0 * NumEdges()) / NumNodes(); }
@@ -89,6 +91,14 @@ protected:
   std::vector<Node> m_nodes;
   std::vector<Link> m_links;
   bool m_is_sorted_by_weight;
+  std::vector<double> m_local_cc_cache;  // store local cc of nodes for caching. When the node information changes, it is cleared.
+  std::vector<double> m_overlap_cache;   // store overlap of links for caching. When the link information changes, it is cleared.
+
+  void ClearCache() {
+    m_is_sorted_by_weight = false;
+    m_local_cc_cache.clear();
+    m_overlap_cache.clear();
+  }
 
   void AddEdge( size_t i, size_t j, double weight) {
     size_t larger = (i > j) ? i : j;
@@ -98,7 +108,7 @@ protected:
     m_nodes[i].AddEdge(j, weight);
     m_nodes[j].AddEdge(i, weight);
     m_links.push_back( Link(i,j,weight) );
-    m_is_sorted_by_weight = false;
+    ClearCache();
   }
   void SortLinkByWeight();
   struct CompareLinkByWeightClass {

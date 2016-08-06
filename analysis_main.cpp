@@ -26,7 +26,19 @@ int main( int argc, char* argv[]) {
 
   Network network;
   std::ifstream fin(argv[1]);
+  std::cerr << "Loading input file" << std::endl;
   network.LoadFile( fin );
+
+  std::cerr << "Conducting percolation analysis" << std::endl;
+  std::ofstream lrp("link_removal_percolation.dat");
+  lrp << "#fraction  weak_link_removal_lcc susceptibility strong_link_removal_lcc susceptibility" << std::endl;
+  std::pair<double,double> fc = network.AnalyzeLinkRemovalPercolationVariableAccuracy( 0.02, 0.02, lrp );
+  lrp.flush();
+
+  std::cerr << "Calculating local clustering coefficients" << std::endl;
+  network.CalculateLocalCCs();
+  std::cerr << "Calculating overlaps" << std::endl;
+  network.CalculateOverlaps();
 
   std::cerr << "Calculating degree distribution" << std::endl;
   std::ofstream dd("degree_distribution.dat");
@@ -80,12 +92,6 @@ int main( int argc, char* argv[]) {
   }
   owc.flush();
 
-  std::cerr << "Conducting percolation analysis" << std::endl;
-  std::ofstream lrp("link_removal_percolation.dat");
-  lrp << "#fraction  weak_link_removal_lcc susceptibility strong_link_removal_lcc susceptibility" << std::endl;
-  std::pair<double,double> fc = network.AnalyzeLinkRemovalPercolationVariableAccuracy( 0.02, 0.02, lrp );
-  lrp.flush();
-
   std::cerr << "Calculating scalar values" << std::endl;
   std::ofstream fout("_output.json");
   fout << "{" << std::endl;
@@ -104,6 +110,5 @@ int main( int argc, char* argv[]) {
   fout << "  \"Fc_Descending\": " << fc.second << ',' << std::endl;
   fout << "  \"Delta_Fc\": " << fc.second - fc.first << std::endl;
   fout << "}" << std::endl;
-
   return 0;
 }
