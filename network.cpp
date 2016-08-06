@@ -114,7 +114,7 @@ double Network::LocalOverlap(size_t link_id) const {
 
   size_t ki = m_nodes[i].Degree();
   size_t kj = m_nodes[j].Degree();
-  if( ki < 2 || kj < 2 ) { return 0.0; }
+  if( ki == 1 && kj == 1 ) { return 0.0; }
 
   std::set<size_t> neighbors_i;
   for(const Edge& edge : ni.m_edges) {
