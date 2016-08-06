@@ -28,6 +28,7 @@ int main( int argc, char* argv[]) {
   std::ifstream fin(argv[1]);
   network.LoadFile( fin );
 
+  std::cerr << "Calculating degree distribution" << std::endl;
   std::ofstream dd("degree_distribution.dat");
   const auto degree_distribution = network.DegreeDistribution();
   for(const auto& f : degree_distribution ) {
@@ -35,6 +36,7 @@ int main( int argc, char* argv[]) {
   }
   dd.flush();
 
+  std::cerr << "Calculating link weight distribution" << std::endl;
   // double edge_weight_bin_size = 1.0;
   std::ofstream ewd("edge_weight_distribution.dat");
   for(const auto& f : network.EdgeWeightDistributionLogBin() ) {
@@ -42,6 +44,7 @@ int main( int argc, char* argv[]) {
   }
   ewd.flush();
 
+  std::cerr << "Calculating node strength distribution" << std::endl;
   double strength_bin_size = 1.0;
   std::ofstream sd("strength_distribution.dat");
   for(const auto& f : network.StrengthDistribution(strength_bin_size)) {
@@ -49,35 +52,41 @@ int main( int argc, char* argv[]) {
   }
   sd.flush();
 
+  std::cerr << "Calculating c(k)" << std::endl;
   std::ofstream cc_d("cc_degree_correlation.dat");
   for(const auto& f : network.CC_DegreeCorrelation() ) {
     cc_d << f.first << ' ' << f.second << std::endl;
   }
   cc_d.flush();
 
+  std::cerr << "Calculating s(k)" << std::endl;
   std::ofstream sdc("strength_degree_correlation.dat");
   for(const auto& f : network.StrengthDegreeCorrelation() ) {
     sdc << f.first << ' ' << f.second << std::endl;
   }
   sdc.flush();
 
+  std::cerr << "Calculating k_nn(k)" << std::endl;
   std::ofstream ndc("neighbor_degree_correlation.dat");
   for(const auto& f : network.NeighborDegreeCorrelation() ) {
     ndc << f.first << ' ' << f.second << std::endl;
   }
   ndc.flush();
 
+  std::cerr << "Calculating O(w)" << std::endl;
   std::ofstream owc("overlap_weight_correlation.dat");
   for(const auto& f : network.OverlapWeightCorrelationLogBin() ) {
     owc << f.first << ' ' << f.second << std::endl;
   }
   owc.flush();
 
+  std::cerr << "Conducting percolation analysis" << std::endl;
   std::ofstream lrp("link_removal_percolation.dat");
   lrp << "#fraction  weak_link_removal_lcc susceptibility strong_link_removal_lcc susceptibility" << std::endl;
   std::pair<double,double> fc = network.AnalyzeLinkRemovalPercolationVariableAccuracy( 0.02, 0.02, lrp );
   lrp.flush();
 
+  std::cerr << "Calculating scalar values" << std::endl;
   std::ofstream fout("_output.json");
   fout << "{" << std::endl;
   fout << "  \"NumNodes\": " << network.NumNodes() << ',' << std::endl;
