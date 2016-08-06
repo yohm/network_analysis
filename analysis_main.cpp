@@ -92,7 +92,8 @@ int main( int argc, char* argv[]) {
   fout << "  \"AverageOverlap\": " << network.AverageOverlap() << ',' << std::endl;
   fout << "  \"PPC_O_w\": " << network.PPC_O_w() << ',' << std::endl;
   fout << "  \"Fc_Ascending\": " << fc.first << ',' << std::endl;
-  fout << "  \"Fc_Descending\": " << fc.second << std::endl;
+  fout << "  \"Fc_Descending\": " << fc.second << ',' << std::endl;
+  fout << "  \"Delta_Fc\": " << fc.second - fc.first << std::endl;
   fout << "}" << std::endl;
 
   return 0;
