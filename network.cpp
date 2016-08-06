@@ -109,12 +109,15 @@ double Network::LocalOverlap(size_t link_id) const {
   size_t i = m_links[link_id].m_node_id1;
   size_t j = m_links[link_id].m_node_id2;
 
+  const Node& ni = m_nodes[i];
+  const Node& nj = m_nodes[j];
+
   std::set<size_t> neighbors_i;
-  for(const Edge& edge : m_nodes[i].m_edges) {
+  for(const Edge& edge : ni.m_edges) {
     neighbors_i.insert( edge.m_node_id );
   }
   size_t num_common = 0;
-  for(const Edge& edge : m_nodes[j].m_edges) {
+  for(const Edge& edge : nj.m_edges) {
     size_t k = edge.m_node_id;
     if( neighbors_i.find(k) != neighbors_i.end() ) { num_common++; }
   }
