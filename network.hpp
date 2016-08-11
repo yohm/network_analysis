@@ -47,8 +47,6 @@ public:
   // The function returns the transition points for ascending and descending orders as a return value,
   // where transition points are estimated as the point having maximum susceptibility.
 
-  void AnalyzeLinkRemovalPercolation(double f, bool weak_link_removal, double& r_lcc, double& susceptibility);
-  Network* MakeFilteredNetwork(double f, bool weak_link_removal);
   std::vector<size_t> PercolatedClusterSizeDistribution() const;
   void AnalyzePercolation(double& r_lcc, double& susceptibility) const;
 protected:
@@ -114,6 +112,8 @@ protected:
   struct CompareLinkByWeightClass {
     bool operator() ( const Link& link1, const Link& link2 ) { return (link1.m_weight < link2.m_weight); }
   } compareLinkByWeight;
+  Network* MakeFilteredNetwork(double f, bool weak_link_removal) const;
+  void AnalyzeLinkRemovalPercolation(double f, bool weak_link_removal, double& r_lcc, double& susceptibility) const;
   double LocalCC(size_t i) const;
   double LocalOverlap(size_t link_id) const;
   double AverageNeighborDegree(size_t i) const;

@@ -23,6 +23,7 @@ void Network::LoadFile( std::ifstream& fin ) {
 
 void Network::CalculateOverlaps() {
   m_overlap_cache.resize( m_links.size() );
+  #pragma omp parallel for
   for( size_t i=0; i < m_links.size(); i++) {
     m_overlap_cache[i] = LocalOverlap(i);
   }
@@ -30,6 +31,7 @@ void Network::CalculateOverlaps() {
 
 void Network::CalculateLocalCCs() {
   m_local_cc_cache.resize( m_nodes.size() );
+  #pragma omp parallel for
   for( size_t i=0; i < m_nodes.size(); i++) {
     m_local_cc_cache[i] = LocalCC(i);
   }
@@ -443,16 +445,23 @@ void Network::SortLinkByWeight() {
   if( !m_is_sorted_by_weight ) {
     std::sort(m_links.begin(), m_links.end(), compareLinkByWeight);
     ClearCache();
+    m_is_sorted_by_weight = true;
   }
 }
 
 std::pair<double,double> Network::AnalyzeLinkRemovalPercolationVariableAccuracy(double df, double d_R, std::ostream& os) {
+  SortLinkByWeight();
   typedef std::tuple<double,double,double,double> perc_result_t;  // R_lcc_asc, susc_asc, R_lcc_desc, susc_desc
 
   auto PercolationAt = [&](double f)->perc_result_t {
     double lcc1, succ1, lcc2, succ2;
-    AnalyzeLinkRemovalPercolation(f, true, lcc1, succ1);
-    AnalyzeLinkRemovalPercolation(f, false, lcc2, succ2);
+    #pragma omp parallel sections num_threads(2)
+    {
+      #pragma omp section
+      AnalyzeLinkRemovalPercolation(f, true, lcc1, succ1);
+      #pragma omp section
+      AnalyzeLinkRemovalPercolation(f, false, lcc2, succ2);
+    }
     perc_result_t result = std::make_tuple(lcc1, succ1, lcc2, succ2);
     return result;
   };
@@ -520,15 +529,18 @@ std::pair<double,double> Network::AnalyzeLinkRemovalPercolationVariableAccuracy(
   return ret;
 }
 
-void Network::AnalyzeLinkRemovalPercolation(double f, bool weak_link_removal, double& r_lcc, double& susceptibility) {
+void Network::AnalyzeLinkRemovalPercolation(double f, bool weak_link_removal, double& r_lcc, double& susceptibility) const {
   Network* filtered = MakeFilteredNetwork(f, weak_link_removal);
   filtered->AnalyzePercolation(r_lcc, susceptibility);
   delete filtered;
 }
 
-Network* Network::MakeFilteredNetwork(double f, bool weak_link_removal) {
+Network* Network::MakeFilteredNetwork(double f, bool weak_link_removal) const {
   Network * filtered = new Network(m_nodes.size());
-  SortLinkByWeight();
+  if( !m_is_sorted_by_weight ) {
+    std::cerr << "You must call SortLinkByWeight in advance." << std::endl;
+    exit(1);
+  }
   if( weak_link_removal ) {
     size_t threshold = m_links.size() * f;
     for( size_t i = threshold; i < m_links.size(); i++) {
