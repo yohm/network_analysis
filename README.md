@@ -60,6 +60,13 @@ env CXX=g++ INCLUDE=-I/usr/local/include make
 You will find `analyzer.out`.
 Since the makefile is very simple, you can edit it by yourself if you encountered a trouble.
 
+The code is parallelized OpenMP as well. If you have a compiler supporting OpenMP, you can enable OpenMP by specifying `-fopenmp` option.
+For example,
+
+```
+env CXX=g++-5 INCLUDE=-I/usr/local/include OPT='-O2 -fopenmp -std=c++11' make
+```
+
 ## Running
 
 Just run `run.sh` specifing the network file and output directory as arguments.
