@@ -129,7 +129,7 @@ double Network::LocalOverlap(size_t link_id) const {
   return static_cast<double>(num_common)/(ki + kj - 2 - num_common);
 }
 
-double Network::PPC( const std::vector<double>& xs, const std::vector<double>& ys ) const {
+double Network::PCC( const std::vector<double>& xs, const std::vector<double>& ys ) const {
 
   auto sum = []( const std::vector<double>& a ) {
     double ret = 0.0;
@@ -158,7 +158,7 @@ double Network::PPC( const std::vector<double>& xs, const std::vector<double>& y
   return numerator / denominator;
 }
 
-double Network::PPC_k_knn() const {
+double Network::PCC_k_knn() const {
   std::vector<double> xs;
   std::vector<double> ys;
 
@@ -169,10 +169,10 @@ double Network::PPC_k_knn() const {
     ys.push_back( static_cast<double>(k2) );
   }
 
-  return PPC( xs, ys );
+  return PCC( xs, ys );
 }
 
-double Network::PPC_C_k() const {
+double Network::PCC_C_k() const {
   if( m_local_cc_cache.empty() ) {
     std::cerr << "You must call CalculateLocalCCs() before calling this function." << std::endl;
     throw 1;
@@ -188,10 +188,10 @@ double Network::PPC_C_k() const {
     ys.push_back( c );
   }
 
-  return PPC( xs, ys );
+  return PCC( xs, ys );
 }
 
-double Network::PPC_s_k() const {
+double Network::PCC_s_k() const {
   std::vector<double> xs;
   std::vector<double> ys;
 
@@ -201,10 +201,10 @@ double Network::PPC_s_k() const {
     xs.push_back( static_cast<double>(k) );
     ys.push_back( s );
   }
-  return PPC( xs, ys );
+  return PCC( xs, ys );
 }
 
-double Network::PPC_O_w() const {
+double Network::PCC_O_w() const {
   if( m_overlap_cache.empty() ) {
     std::cerr << "You must call CalculateOverlaps() before calling this function." << std::endl;
     throw 1;
@@ -218,7 +218,7 @@ double Network::PPC_O_w() const {
     xs.push_back( w );
     ys.push_back( o );
   }
-  return PPC( xs, ys );
+  return PCC( xs, ys );
 }
 
 std::map<double, size_t> Network::EdgeWeightDistribution(double bin_size) const {

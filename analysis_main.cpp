@@ -98,14 +98,14 @@ int main( int argc, char* argv[]) {
   fout << "  \"NumNodes\": " << network.NumNodes() << ',' << std::endl;
   fout << "  \"NumEdges\": " << network.NumEdges() << ',' << std::endl;
   fout << "  \"AverageDegree\": " << network.AverageDegree() << ',' << std::endl;
-  fout << "  \"Assortativity\": " << network.PPC_k_knn() << ',' << std::endl;
+  fout << "  \"Assortativity\": " << network.PCC_k_knn() << ',' << std::endl;
   fout << "  \"ArgMax_Pk\": " << ArgMax( degree_distribution ) << ',' << std::endl;
   fout << "  \"ClusteringCoefficient\": " << network.ClusteringCoefficient() << ',' << std::endl;
-  fout << "  \"PPC_C_k\": " << network.PPC_C_k() << ',' << std::endl;
+  fout << "  \"PCC_C_k\": " << network.PCC_C_k() << ',' << std::endl;
   fout << "  \"AverageEdgeWeight\": " << network.AverageEdgeWeight() << ',' << std::endl;
-  fout << "  \"PPC_s_k\": " << network.PPC_s_k() << ',' << std::endl;
+  fout << "  \"PCC_s_k\": " << network.PCC_s_k() << ',' << std::endl;
   fout << "  \"AverageOverlap\": " << network.AverageOverlap() << ',' << std::endl;
-  fout << "  \"PPC_O_w\": " << network.PPC_O_w() << ',' << std::endl;
+  fout << "  \"PCC_O_w\": " << network.PCC_O_w() << ',' << std::endl;
   fout << "  \"Fc_Ascending\": " << fc.first << ',' << std::endl;
   fout << "  \"Fc_Descending\": " << fc.second << ',' << std::endl;
   fout << "  \"Delta_Fc\": " << fc.second - fc.first << std::endl;
