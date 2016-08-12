@@ -21,6 +21,13 @@ void Network::LoadFile( std::ifstream& fin ) {
   ClearCache();
 }
 
+bool Network::IsWeighted() const {
+  for( const Link& l : m_links ) {
+    if( l.m_weight != 1.0 ) { return true; }
+  }
+  return false;
+}
+
 void Network::CalculateOverlaps() {
   m_overlap_cache.resize( m_links.size() );
   #pragma omp parallel for

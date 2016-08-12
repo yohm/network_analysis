@@ -29,16 +29,26 @@ int main( int argc, char* argv[]) {
   std::cerr << "Loading input file" << std::endl;
   network.LoadFile( fin );
 
+  bool is_weighted = network.IsWeighted();
+  if( ! is_weighted ) {
+    std::cerr << "All the link weights are 1. Analyze the network as a non-weighted network." << std::endl;
+  }
+
+  std::pair<double,double> fc;
+  if( is_weighted ) {
   std::cerr << "Conducting percolation analysis" << std::endl;
   std::ofstream lrp("link_removal_percolation.dat");
   lrp << "#fraction  weak_link_removal_lcc susceptibility strong_link_removal_lcc susceptibility" << std::endl;
-  std::pair<double,double> fc = network.AnalyzeLinkRemovalPercolationVariableAccuracy( 0.02, 0.02, lrp );
+  fc = network.AnalyzeLinkRemovalPercolationVariableAccuracy( 0.02, 0.02, lrp );
   lrp.flush();
+  }
 
   std::cerr << "Calculating local clustering coefficients" << std::endl;
   network.CalculateLocalCCs();
+  if( is_weighted ) {
   std::cerr << "Calculating overlaps" << std::endl;
   network.CalculateOverlaps();
+  }
 
   std::cerr << "Calculating degree distribution" << std::endl;
   std::ofstream dd("degree_distribution.dat");
@@ -48,6 +58,7 @@ int main( int argc, char* argv[]) {
   }
   dd.flush();
 
+  if( is_weighted ) {
   std::cerr << "Calculating link weight distribution" << std::endl;
   // double edge_weight_bin_size = 1.0;
   std::ofstream ewd("edge_weight_distribution.dat");
@@ -55,7 +66,9 @@ int main( int argc, char* argv[]) {
     ewd << f.first << ' ' << f.second << std::endl;
   }
   ewd.flush();
+  }
 
+  if( is_weighted ) {
   std::cerr << "Calculating node strength distribution" << std::endl;
   double strength_bin_size = 1.0;
   std::ofstream sd("strength_distribution.dat");
@@ -63,6 +76,7 @@ int main( int argc, char* argv[]) {
     sd << f.first << ' ' << f.second << std::endl;
   }
   sd.flush();
+  }
 
   std::cerr << "Calculating c(k)" << std::endl;
   std::ofstream cc_d("cc_degree_correlation.dat");
@@ -71,12 +85,14 @@ int main( int argc, char* argv[]) {
   }
   cc_d.flush();
 
+  if( is_weighted ) {
   std::cerr << "Calculating s(k)" << std::endl;
   std::ofstream sdc("strength_degree_correlation.dat");
   for(const auto& f : network.StrengthDegreeCorrelation() ) {
     sdc << f.first << ' ' << f.second << std::endl;
   }
   sdc.flush();
+  }
 
   std::cerr << "Calculating k_nn(k)" << std::endl;
   std::ofstream ndc("neighbor_degree_correlation.dat");
@@ -85,12 +101,14 @@ int main( int argc, char* argv[]) {
   }
   ndc.flush();
 
+  if( is_weighted ) {
   std::cerr << "Calculating O(w)" << std::endl;
   std::ofstream owc("overlap_weight_correlation.dat");
   for(const auto& f : network.OverlapWeightCorrelationLogBin() ) {
     owc << f.first << ' ' << f.second << std::endl;
   }
   owc.flush();
+  }
 
   std::cerr << "Calculating scalar values" << std::endl;
   std::ofstream fout("_output.json");
@@ -101,7 +119,9 @@ int main( int argc, char* argv[]) {
   fout << "  \"Assortativity\": " << network.PCC_k_knn() << ',' << std::endl;
   fout << "  \"ArgMax_Pk\": " << ArgMax( degree_distribution ) << ',' << std::endl;
   fout << "  \"ClusteringCoefficient\": " << network.ClusteringCoefficient() << ',' << std::endl;
-  fout << "  \"PCC_C_k\": " << network.PCC_C_k() << ',' << std::endl;
+  fout << "  \"PCC_C_k\": " << network.PCC_C_k();
+  if( is_weighted ) {
+  fout << ',' << std::endl;
   fout << "  \"AverageEdgeWeight\": " << network.AverageEdgeWeight() << ',' << std::endl;
   fout << "  \"PCC_s_k\": " << network.PCC_s_k() << ',' << std::endl;
   fout << "  \"AverageOverlap\": " << network.AverageOverlap() << ',' << std::endl;
@@ -109,6 +129,7 @@ int main( int argc, char* argv[]) {
   fout << "  \"Fc_Ascending\": " << fc.first << ',' << std::endl;
   fout << "  \"Fc_Descending\": " << fc.second << ',' << std::endl;
   fout << "  \"Delta_Fc\": " << fc.second - fc.first << std::endl;
+  }
   fout << "}" << std::endl;
   return 0;
 }

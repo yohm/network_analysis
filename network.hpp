@@ -16,6 +16,7 @@ public:
   }
   ~Network() {};
   void LoadFile( std::ifstream& fin );
+  bool IsWeighted() const; // return true if the network is weighted. If all link weights are 1, it is regarded as a non-weighted network.
   void Print( std::ostream& out = std::cerr ) const;
   void CalculateOverlaps();  // this function must be called prior to AverageOverlap/OverlapWeightCorrelation/OverlapWeightCorrelationLogBin/PCC_O_w.
   void CalculateLocalCCs();  // this function must be called prior to ClusteringCoefficient/CC_DegreeCorrelation/PCC_C_k.
