@@ -6,5 +6,5 @@ set format x "10^{%L}"
 set format y "10^{%L}"
 set xlabel "s"
 set ylabel "frequency"
-plot indir."/strength_distribution.dat" w lp
+plot indir."/strength_distribution_logbin.dat" w lp
 
