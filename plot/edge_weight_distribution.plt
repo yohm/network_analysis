@@ -7,5 +7,5 @@ set format y "10^{%L}"
 set xlabel "w_{ij}"
 set ylabel "frequency"
 unset key
-plot indir."/edge_weight_distribution.dat" w lp
+plot indir."/edge_weight_distribution_logbin.dat" w lp
 
