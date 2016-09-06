@@ -50,6 +50,14 @@ void Network::Print( std::ostream& out ) const {
   }
 }
 
+size_t Network::NumNodes() const {
+  size_t count = 0;
+  for( const Node& n: m_nodes ) {
+    if( n.Degree() > 0 ) count++;
+  }
+  return count;
+}
+
 size_t Network::NumEdges() const {
   return m_links.size();
 }
@@ -60,10 +68,13 @@ double Network::ClusteringCoefficient() const {
     throw 1;
   }
   double total = 0.0;
+  size_t count = 0;
   for( size_t i = 0; i < m_local_cc_cache.size(); ++i) {
+    if( m_nodes[i].Degree() == 0 ) { continue; }
     total += m_local_cc_cache[i];
+    count++;
   }
-  return total / m_nodes.size();
+  return total / count;
 }
 
 double Network::LocalCC(size_t idx) const {
@@ -85,6 +96,7 @@ double Network::LocalCC(size_t idx) const {
 std::map<size_t, size_t> Network::DegreeDistribution() const {
   std::map<size_t, size_t> histo;
   for(const Node& node : m_nodes) {
+    if( node.Degree() == 0 ) { continue; }
     if( histo.find(node.Degree()) != histo.end() ) {
       histo[node.Degree()] += 1;
     } else {
@@ -206,6 +218,7 @@ double Network::PCC_s_k() const {
 
   for( const Node& n: m_nodes ) {
     size_t k = n.Degree();
+    if( k == 0 ) { continue; }
     double s = n.Strength();
     xs.push_back( static_cast<double>(k) );
     ys.push_back( s );
@@ -289,6 +302,7 @@ std::map<double, size_t> Network::EdgeWeightDistributionLogBin() const {
 std::map<double, size_t> Network::StrengthDistribution(double bin_size) const {
   std::map<int, size_t> histo;
   for(const Node& node : m_nodes) {
+    if( node.Degree() == 0 ) { continue; }
     int key = static_cast<int>( node.Strength()/bin_size + 0.5 );
     if( histo.find(key) == histo.end() ) { histo[key] = 0; }
     histo[key] += 1;
@@ -348,7 +362,7 @@ std::map<size_t, double> Network::CC_DegreeCorrelation() const {
   for(size_t i = 0; i < m_nodes.size(); ++i) {
     const Node& node = m_nodes[i];
     const size_t k = node.Degree();
-    if( k == 0 ) { continue; }
+    if( k < 2 ) { continue; }
     const double lcc = m_local_cc_cache[i];
     if( cc_counts.find(k) != cc_counts.end() ) {
       cc_counts[ k ] += 1;
@@ -371,6 +385,7 @@ std::map<size_t, double> Network::StrengthDegreeCorrelation() const {
   std::map<size_t, size_t> s_counts;
   std::map<size_t, double> s_total;
   for(const Node& node : m_nodes) {
+    if( node.Degree() == 0 ) { continue; }
     const size_t k = node.Degree();
     const double s = node.Strength();
     if( s_counts.find(k) == s_counts.end() ) { s_counts[k] = 0; s_total[k] = 0.0;}

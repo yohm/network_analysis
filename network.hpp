@@ -20,7 +20,7 @@ public:
   void Print( std::ostream& out = std::cerr ) const;
   void CalculateOverlaps();  // this function must be called prior to AverageOverlap/OverlapWeightCorrelation/OverlapWeightCorrelationLogBin/PCC_O_w.
   void CalculateLocalCCs();  // this function must be called prior to ClusteringCoefficient/CC_DegreeCorrelation/PCC_C_k.
-  size_t NumNodes() const { return m_nodes.size(); }
+  size_t NumNodes() const;
   size_t NumEdges() const;
   double AverageDegree() const { return (2.0 * NumEdges()) / NumNodes(); }
   double AverageEdgeWeight() const;
