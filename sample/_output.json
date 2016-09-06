@@ -7,6 +7,7 @@
   "ClusteringCoefficient": 0.655518,
   "PCC_C_k": -0.692997,
   "AverageEdgeWeight": 260.492,
+  "ArgMax_Ps": 6,
   "PCC_s_k": 0.682286,
   "AverageOverlap": 0.364831,
   "PCC_O_w": 0.337869,

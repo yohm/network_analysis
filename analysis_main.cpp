@@ -17,6 +17,19 @@ size_t ArgMax( std::map<size_t,size_t> map ) {
   }
   return max_key;
 }
+size_t ArgMax( std::map<double,size_t> map ) {
+  size_t max_key = map.begin()->first;
+  size_t max_val = map.begin()->second;
+
+  for( const auto& pair: map ) {
+    size_t val = pair.second;
+    if( val > max_val ) {
+      max_key = pair.first;
+      max_val = val;
+    }
+  }
+  return max_key;
+}
 
 int main( int argc, char* argv[]) {
   if(argc != 2) {
@@ -68,11 +81,13 @@ int main( int argc, char* argv[]) {
   ewd.flush();
   }
 
+  std::map<double, size_t> strength_distribution;
   if( is_weighted ) {
   std::cerr << "Calculating node strength distribution" << std::endl;
   double strength_bin_size = 1.0;
   std::ofstream sd("strength_distribution.dat");
-  for(const auto& f : network.StrengthDistribution(strength_bin_size)) {
+  strength_distribution = network.StrengthDistribution(strength_bin_size);
+  for(const auto& f :strength_distribution) {
     sd << f.first << ' ' << f.second << std::endl;
   }
   sd.flush();
@@ -123,6 +138,7 @@ int main( int argc, char* argv[]) {
   if( is_weighted ) {
   fout << ',' << std::endl;
   fout << "  \"AverageEdgeWeight\": " << network.AverageEdgeWeight() << ',' << std::endl;
+  fout << "  \"ArgMax_Ps\": " << ArgMax( strength_distribution ) << ',' << std::endl;
   fout << "  \"PCC_s_k\": " << network.PCC_s_k() << ',' << std::endl;
   fout << "  \"AverageOverlap\": " << network.AverageOverlap() << ',' << std::endl;
   fout << "  \"PCC_O_w\": " << network.PCC_O_w() << ',' << std::endl;
