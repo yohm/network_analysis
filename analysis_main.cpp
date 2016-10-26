@@ -52,7 +52,7 @@ int main( int argc, char* argv[]) {
   std::cerr << "Conducting percolation analysis" << std::endl;
   std::ofstream lrp("link_removal_percolation.dat");
   lrp << "#fraction  weak_link_removal_lcc susceptibility strong_link_removal_lcc susceptibility" << std::endl;
-  fc = network.AnalyzeLinkRemovalPercolationVariableAccuracy( 0.02, 0.02, lrp );
+  fc = network.AnalyzeLinkRemovalPercolationVariableAccuracy( 0.02, 0.005, lrp );
   lrp.flush();
   }
 
