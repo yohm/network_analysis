@@ -84,7 +84,8 @@ int main( int argc, char* argv[]) {
   std::map<double, size_t> strength_distribution;
   if( is_weighted ) {
   std::cerr << "Calculating node strength distribution" << std::endl;
-  double strength_bin_size = 1.0;
+  double avg_s = network.AverageEdgeWeight() * network.AverageDegree();
+  double strength_bin_size = avg_s * 0.01;
   std::ofstream sd("strength_distribution.dat");
   strength_distribution = network.StrengthDistribution(strength_bin_size);
   for(const auto& f :strength_distribution) {
