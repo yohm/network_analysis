@@ -17,8 +17,8 @@ size_t ArgMax( std::map<size_t,size_t> map ) {
   }
   return max_key;
 }
-size_t ArgMax( std::map<double,size_t> map ) {
-  size_t max_key = map.begin()->first;
+double ArgMax( std::map<double,size_t> map ) {
+  double max_key = map.begin()->first;
   size_t max_val = map.begin()->second;
 
   for( const auto& pair: map ) {
