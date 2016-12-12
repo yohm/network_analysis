@@ -138,8 +138,13 @@ int main( int argc, char* argv[]) {
   fout << "  \"PCC_C_k\": " << network.PCC_C_k();
   if( is_weighted ) {
   fout << ',' << std::endl;
-  fout << "  \"AverageEdgeWeight\": " << network.AverageEdgeWeight() << ',' << std::endl;
-  fout << "  \"ArgMax_Ps\": " << ArgMax( strength_distribution ) << ',' << std::endl;
+  double ave_w = network.AverageEdgeWeight();
+  fout << "  \"AverageEdgeWeight\": " << ave_w << ',' << std::endl;
+  double ave_k = network.AverageDegree();
+  fout << "  \"AverageStrength\": " << ave_w * ave_k << ',' << std::endl;
+  double argmax_ps = ArgMax( strength_distribution );
+  fout << "  \"ArgMax_Ps\": " << argmax_ps << ',' << std::endl;
+  fout << "  \"Normalized_ArgMax_Ps\": " << argmax_ps / (ave_w*ave_k) << ',' << std::endl;
   fout << "  \"PCC_s_k\": " << network.PCC_s_k() << ',' << std::endl;
   fout << "  \"AverageOverlap\": " << network.AverageOverlap() << ',' << std::endl;
   fout << "  \"PCC_O_w\": " << network.PCC_O_w() << ',' << std::endl;
