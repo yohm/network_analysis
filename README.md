@@ -80,7 +80,7 @@ If you specify the second argument, output files are generated in that directory
 
 ## Plotting
 
-We prepared gnuplot scripts to make plots.
+We prepared scripts to make plots. Python3, numpy, matplotlib are rquired.
 
 ```
 ./plot/plot_all.sh <result directory> [figure directory]
