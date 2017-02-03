@@ -1,7 +1,6 @@
 #include <iostream>
 #include <fstream>
 #include <string>
-#include <boost/lexical_cast.hpp>
 #include "network.hpp"
 
 size_t ArgMax( std::map<size_t,size_t> map ) {

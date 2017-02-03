@@ -5,7 +5,6 @@
 #include <fstream>
 #include <vector>
 #include <map>
-#include <boost/foreach.hpp>
 
 class Network {
 public:
@@ -67,11 +66,11 @@ protected:
     size_t Degree() const { return m_edges.size(); }
     double Strength() const {
       double total = 0.0;
-      BOOST_FOREACH(Edge e, m_edges) { total += e.m_weight; }
+      for( Edge e: m_edges ) { total += e.m_weight; }
       return total;
     }
     bool ConnectedTo(size_t j) const {
-      BOOST_FOREACH(Edge e, m_edges) { if( e.m_node_id == j ) { return true; } }
+      for(Edge e : m_edges) { if( e.m_node_id == j ) { return true; } }
       return false;
     }
   };

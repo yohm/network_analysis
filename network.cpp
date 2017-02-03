@@ -2,7 +2,7 @@
 #include <queue>
 #include <set>
 #include <algorithm>
-#include <boost/lexical_cast.hpp>
+#include <cmath>
 #include "network.hpp"
 
 void Network::LoadFile( std::ifstream& fin ) {
