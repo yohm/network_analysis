@@ -2,6 +2,7 @@
 #include <queue>
 #include <set>
 #include <algorithm>
+#include <functional>
 #include <cmath>
 #include "network.hpp"
 

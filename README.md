@@ -42,19 +42,10 @@ You can find a sample input file `sample/net.edg` in this repository.
 
 ## Compiling
 
-C++ boost library is required. Please install it on your system.
-If you are using MacOSX, just run
+Run `make` to compile the program. Specify `CXX` if necessary.
 
 ```
-brew install boost
-```
-
-Or you can just download the file from [the boost official page](http://www.boost.org/) since we need header files only.
-
-Run `make` to compile the program. Specify `CPP` or `INCLUDE` environment variables if necessary.
-
-```
-env CXX=g++ INCLUDE=-I/usr/local/include make
+env CXX=g++ make
 ```
 
 You will find `analyzer.out`.
@@ -64,7 +55,7 @@ The code is parallelized OpenMP as well. If you have a compiler supporting OpenM
 For example,
 
 ```
-env CXX=g++-5 INCLUDE=-I/usr/local/include OPT='-O2 -fopenmp -std=c++11' make
+env CXX=g++-5 OPT='-O2 -fopenmp -std=c++11' make
 ```
 
 ## Running
