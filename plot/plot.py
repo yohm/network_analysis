@@ -1,4 +1,6 @@
 import argparse, os.path
+import matplotlib
+matplotlib.use('Agg')
 import matplotlib.pyplot as plt
 
 parser = argparse.ArgumentParser(description='plot the file')
