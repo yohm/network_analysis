@@ -1,6 +1,4 @@
 import sys,re,json,os.path
-#import matplotlib.pyplot as plt
-#import numpy as np
 
 infile = open(sys.argv[1])
 pattern = re.compile("^#")
@@ -56,13 +54,6 @@ def num_communities_distribution():
     for k in sorted(counts.keys()):
         f.write("%d %d\n" % (k,counts[k]) )
     f.close()
-    #dat = np.loadtxt(num_coms_dat)
-    #plt.yscale('log')
-    #plt.xlabel('# of communities')
-    #plt.ylabel('frequency')
-    #plt.plot( dat[:,0], dat[:,1], 'o-' )
-    #plt.savefig('num_communities.png')
-    #plt.clf()
 
 num_communities_distribution()
 
@@ -78,13 +69,6 @@ def communit_size_distribution():
     for k in sorted(counts.keys()):
         f.write("%d %d\n" % (k,counts[k]) )
     f.close()
-    #dat = np.loadtxt(com_size_dat)
-    #plt.yscale('log')
-    #plt.xlabel('community size')
-    #plt.ylabel('frequency')
-    #plt.plot( dat[:,0], dat[:,1], 'o-' )
-    #plt.savefig('community_size.png')
-    #plt.clf()
 
 communit_size_distribution()
 
