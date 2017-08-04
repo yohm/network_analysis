@@ -632,3 +632,37 @@ void Network::SearchConnected(size_t target_node, size_t parent_id, std::vector<
     }
   }
 }
+
+Network Network::EgocentricNetwork(size_t i) const {
+  std::map<size_t,size_t> id_map;
+  size_t count = 0;
+  id_map[i] = count;
+  count++;
+  for( const Edge& e: m_nodes[i].m_edges ) {
+    id_map[ e.m_node_id ] = count;
+    count++;
+  }
+
+  Network n;
+  size_t i_mapped = id_map[i];
+  for( const Edge& e: m_nodes[i].m_edges ) {
+    size_t j = e.m_node_id;
+    size_t j_mapped = id_map[j];
+    n.AddEdge(i_mapped,j_mapped,e.m_weight);
+    for( const Edge& ejk: m_nodes[j].m_edges ) {
+      size_t k = ejk.m_node_id;
+      if( k == i ) { continue; }
+      if( id_map.find(k) != id_map.end() ) {
+        size_t k_mapped = id_map[k];
+        n.AddEdge(j_mapped,k_mapped,ejk.m_weight);
+      }
+    }
+  }
+
+  for( size_t x=0; x<n.m_nodes.size(); x++) {
+    n.m_nodes[x].m_id = x;
+  }
+  n.ClearCache();
+
+  return std::move(n);
+}

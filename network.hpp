@@ -13,10 +13,10 @@ public:
     m_nodes.resize(num_nodes);
     for(size_t i=0; i<num_nodes; ++i) { m_nodes[i].m_id = i; }
   }
-  ~Network() {};
   void LoadFile( std::ifstream& fin );
   bool IsWeighted() const; // return true if the network is weighted. If all link weights are 1, it is regarded as a non-weighted network.
   void Print( std::ostream& out = std::cerr ) const;
+  Network EgocentricNetwork(size_t nid) const;
   void CalculateOverlaps();  // this function must be called prior to AverageOverlap/OverlapWeightCorrelation/OverlapWeightCorrelationLogBin/PCC_O_w.
   void CalculateLocalCCs();  // this function must be called prior to ClusteringCoefficient/CC_DegreeCorrelation/PCC_C_k.
   size_t NumNodes() const;
@@ -49,7 +49,6 @@ public:
 
   std::vector<size_t> PercolatedClusterSizeDistribution() const;
   void AnalyzePercolation(double& r_lcc, double& susceptibility) const;
-protected:
   class Edge {
     public:
     Edge( size_t node_id, double weight): m_node_id(node_id), m_weight(weight) {};
@@ -74,7 +73,6 @@ protected:
       return false;
     }
   };
-
   class Link {
     public:
     Link( size_t node_id1, size_t node_id2, double weight) {
@@ -88,6 +86,7 @@ protected:
 
   std::vector<Node> m_nodes;
   std::vector<Link> m_links;
+protected:
   bool m_is_sorted_by_weight;
   std::vector<double> m_local_cc_cache;  // store local cc of nodes for caching. When the node information changes, it is cleared.
   std::vector<double> m_overlap_cache;   // store overlap of links for caching. When the link information changes, it is cleared.
