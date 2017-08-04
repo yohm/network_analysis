@@ -15,10 +15,11 @@ By giving a data of undirected weighted network, you will get
 - P(s): node strength distribution
 - C(k): clustering spectrum (local clustering coefficient as a function of degree)
 - s(k): node strength as a function of degree
-- k_{nn}(k): average degree of neighbors of nodes having degree k (assortativity)
+- k\_{nn}(k): average degree of neighbors of nodes having degree k (assortativity)
 - O(w): link overlap as a function of link weight
 - link removal percolation analysis
     - See [Onnela et al., PNAS 104(18):7332 (2007)](http://www.pnas.org/content/104/18/7332).
+- Community detection using infomap
 
 # Input format
 
@@ -42,6 +43,12 @@ You can find a sample input file `sample/net.edg` in this repository.
 
 ## Compiling
 
+After you clone the repository, update submodule as well.
+
+```
+git submodule update --init --recursive
+```
+
 Run `make` to compile the program. Specify `CXX` if necessary.
 
 ```
@@ -56,6 +63,12 @@ For example,
 
 ```
 env CXX=g++-5 OPT='-O2 -fopenmp -std=c++11' make
+```
+
+Also make infomap.
+
+```
+cd infomap && make
 ```
 
 ## Running
@@ -105,7 +118,7 @@ The procedure would be like the following.
 
 The MIT License (MIT)
 
-Copyright (c) 2016 Yohsuke Murase
+Copyright (c) 2016,2017 Yohsuke Murase
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal

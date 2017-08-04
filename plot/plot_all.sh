@@ -16,6 +16,9 @@ python $plotpy "${INDIR}/cc_degree_correlation.dat" --xlog --ylog --xlabel 'X' -
 python $plotpy "${INDIR}/degree_distribution.dat" --ylog --xlabel 'degree' --ylabel 'frequency' -f png
 python $plotpy "${INDIR}/neighbor_degree_correlation.dat" --xlog --xlabel 'k' --ylabel '$k_{nn}(k)$' -f png
 
+python $plotpy "${INDIR}/num_communities.dat" --ylog --xlabel '# of communities' --ylabel 'frequency' -f png
+python $plotpy "${INDIR}/community_size.dat" --ylog --xlabel 'community size' --ylabel 'frequency' -f png
+
 # plot weight-related properties
 if [ -e $INDIR/edge_weight_distribution.dat ]; then
 
