@@ -116,6 +116,8 @@ The procedure would be like the following.
 
 # LICENSE
 
+The MIT license except for the submodules. For licensing of the submodules, refer to README of each submoudle.
+
 The MIT License (MIT)
 
 Copyright (c) 2016,2017 Yohsuke Murase
