@@ -20,17 +20,6 @@ for line in infile:
     nodes[n].append(c)
 
 # merge json
-def merge_output_json( merged ):
-    out_json = '_output.json'
-    if os.path.isfile(out_json):
-        l = json.load( open(out_json) )
-        for k,v in merged.items():
-            l[k] = v
-        fp = open(out_json, 'w')
-        json.dump(l, fp )
-        fp.flush()
-        fp.close()
-
 def calculate_avg_num_coms_per_node():
     num_coms = [ len(coms) for n,coms in nodes.items() ]
     return sum(num_coms) / len(num_coms)
@@ -39,7 +28,8 @@ def calculate_avg_com_size():
     com_sizes = [len(ns) for c,ns in communities.items() ]
     return sum(com_sizes) / len(com_sizes)
 
-merge_output_json( {"AvgNumComsPerNode": calculate_avg_num_coms_per_node(), "AvgComSize": calculate_avg_com_size() } )
+d = {"AvgNumComsPerNode": calculate_avg_num_coms_per_node(), "AvgComSize": calculate_avg_com_size() }
+print( json.dumps(d) )
 
 # print community size distribution
 def num_communities_distribution():
