@@ -13,4 +13,5 @@ python $script_dir/parse_clu.py community.clu > community_stat.json
 $script_dir/egonet_com.out $NET_FILE > num_egocoms.json
 python $script_dir/merge_json.py _output.json community_stat.json num_egocoms.json > merged.json
 mv merged.json _output.json 
+rm community_stat.json num_egocoms.json
 
