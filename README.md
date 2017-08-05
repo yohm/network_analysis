@@ -68,7 +68,7 @@ env CXX=g++-5 OPT='-O2 -fopenmp -std=c++11' make
 Also make infomap.
 
 ```
-cd infomap && make
+cd infomap && make && make lib
 ```
 
 ## Running

@@ -21,15 +21,23 @@ size_t NumCommunities( const Network& net ) {
    */
 }
 
+void CountHistogram( std::map<size_t,size_t>& histo, size_t x ) {
+  if( histo.find(x) != histo.end() ) {
+    histo[x] += 1;
+  } else {
+    histo[x] = 1;
+  }
+}
+
 int main( int argc, char* argv[]) {
   if (argc != 2 && argc != 3) {
-    std::cerr << "Usage : ./main.out <edge_file> [num_nodes]" << std::endl;
+    std::cerr << "Usage : " << argv[0] << " <edge_file> [num_nodes]" << std::endl;
     exit(1);
   }
 
   Network network;
   std::ifstream fin(argv[1]);
-  std::cerr << "Loading input file" << std::endl;
+  std::cerr << "loading input file" << std::endl;
   network.LoadFile(fin);
 
   size_t num_egos = network.NumNodes();
@@ -37,11 +45,26 @@ int main( int argc, char* argv[]) {
     num_egos = static_cast<size_t>( std::atol(argv[2]) );
   }
 
+  std::cerr << "extracting ego-centric networks" << std::endl;
+  double sum = 0.0;
+  long count = 0;
+  std::map<size_t,size_t> histo;
   for( size_t i=0; i<num_egos; i++) {
     const Network egonet = network.EgocentricNetwork(i);
     if( egonet.NumEdges() < 2 ) { continue; }
-    // egonet.Print(std::cout);
-    std::cout << NumCommunities(egonet) << std::endl;
+    size_t nc = NumCommunities(egonet);
+    sum += nc;
+    count += 1;
+    CountHistogram(histo, nc);
   }
+  std::cout << "{ \"NumEgoCommunities\": " << sum / count << " }" << std::endl;
+  std::cerr << "writing num_egocom_histo.dat" << std::endl;
+  std::ofstream fout("num_egocom_histo.dat");
+  for( auto kv: histo ) {
+    fout << kv.first << ' ' << kv.second << std::endl;
+  }
+  fout.flush(); fout.close();
+
+  return 0;
 }
 
