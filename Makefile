@@ -8,7 +8,7 @@ analyzer.out: $(SRCS) $(HEADERS) Makefile
 	$(CXX) $(OPT) ${SRCS} -o $@
 
 egonet_com.out: egonet_com.cpp network.hpp network.cpp
-	$(CXX) $(OPT) -I infomap/include -L infomap/lib -lInfomap egonet_com.cpp network.cpp -o $@
+	$(CXX) $(OPT) egonet_com.cpp network.cpp -Iinfomap/include -Linfomap/lib -lInfomap -o $@
 
 clean:
 	rm -f *.out *~ *.bak
