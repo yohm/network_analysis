@@ -12,7 +12,7 @@ cd $OUTDIR
 plotpy="${script_dir}/plot.py"
 
 # plot topological properties
-python $plotpy "${INDIR}/cc_degree_correlation.dat" --xlog --ylog --xlabel 'X' --ylabel Y -f png
+python $plotpy "${INDIR}/cc_degree_correlation.dat" --xlog --ylog --xlabel 'k' --ylabel 'C(k)' -f png
 python $plotpy "${INDIR}/degree_distribution.dat" --ylog --xlabel 'degree' --ylabel 'frequency' -f png
 python $plotpy "${INDIR}/neighbor_degree_correlation.dat" --xlog --xlabel 'k' --ylabel '$k_{nn}(k)$' -f png
 
