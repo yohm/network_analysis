@@ -3,7 +3,7 @@ import math,json
 import networkx as nx
 import matplotlib.pyplot as plt
 import matplotlib.colors as colors
-from infomap.examples.python.infomap import infomap
+from infomap.build.py import infomap
 
 
 
