@@ -17,11 +17,13 @@ public:
   bool IsWeighted() const; // return true if the network is weighted. If all link weights are 1, it is regarded as a non-weighted network.
   void Print( std::ostream& out = std::cerr ) const;
   Network EgocentricNetwork(size_t nid) const;
+  Network EgocentricNetworkWithoutEgo(size_t nid) const;  // Ego-centric network excluding ego itself
+  Network PruneIsolates() const; // remove isolated nodes
   void CalculateOverlaps();  // this function must be called prior to AverageOverlap/OverlapWeightCorrelation/OverlapWeightCorrelationLogBin/PCC_O_w.
   void CalculateLocalCCs();  // this function must be called prior to ClusteringCoefficient/CC_DegreeCorrelation/PCC_C_k.
-  size_t NumNodes() const;
+  size_t NumConnectedNodes() const;
   size_t NumEdges() const;
-  double AverageDegree() const { return (2.0 * NumEdges()) / NumNodes(); }
+  double AverageDegree() const { return (2.0 * NumEdges()) / NumConnectedNodes(); }
   double AverageEdgeWeight() const;
   double AverageOverlap() const;
   double PCC_k_knn() const;  // Pearson correlation coefficient between degrees of neighboring nodes, i.e. assortativity

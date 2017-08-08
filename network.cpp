@@ -51,7 +51,7 @@ void Network::Print( std::ostream& out ) const {
   }
 }
 
-size_t Network::NumNodes() const {
+size_t Network::NumConnectedNodes() const {
   size_t count = 0;
   for( const Node& n: m_nodes ) {
     if( n.Degree() > 0 ) count++;
@@ -643,7 +643,7 @@ Network Network::EgocentricNetwork(size_t i) const {
     count++;
   }
 
-  Network n;
+  Network n( m_nodes[i].Degree() );
   size_t i_mapped = id_map[i];
   for( const Edge& e: m_nodes[i].m_edges ) {
     size_t j = e.m_node_id;
@@ -666,3 +666,61 @@ Network Network::EgocentricNetwork(size_t i) const {
 
   return std::move(n);
 }
+
+Network Network::EgocentricNetworkWithoutEgo(size_t i) const {
+  std::map<size_t,size_t> id_map;
+  size_t count = 0;
+  for( const Edge& e: m_nodes[i].m_edges ) {
+    id_map[ e.m_node_id ] = count;
+    count++;
+  }
+
+  Network n( m_nodes[i].Degree() );
+  for( const Edge& e: m_nodes[i].m_edges ) {
+    size_t j = e.m_node_id;
+    size_t j_mapped = id_map[j];
+    for( const Edge& ejk: m_nodes[j].m_edges ) {
+      size_t k = ejk.m_node_id;
+      if( id_map.find(k) != id_map.end() ) {
+        size_t k_mapped = id_map[k];
+        if( j_mapped < k_mapped ) {
+          n.AddEdge(j_mapped, k_mapped, ejk.m_weight);
+        }
+      }
+    }
+  }
+
+  for( size_t x=0; x<n.m_nodes.size(); x++) {
+    n.m_nodes[x].m_id = x;
+  }
+  n.ClearCache();
+
+  return std::move(n);
+}
+
+Network Network::PruneIsolates() const {
+  std::map<size_t,size_t> id_map;
+  size_t count = 0;
+  for( const Node& n: m_nodes ) {
+    if( n.Degree() > 0 ) {
+      id_map[ n.m_id ] = count;
+      count++;
+    }
+  }
+
+  Network n;
+  for( const Link& l: m_links ) {
+    size_t n1 = id_map[l.m_node_id1];
+    size_t n2 = id_map[l.m_node_id2];
+    if (n1 < n2) {
+      n.AddEdge(n1, n2, l.m_weight);
+    }
+  }
+  for( size_t x=0; x<n.m_nodes.size(); x++) {
+    n.m_nodes[x].m_id = x;
+  }
+  n.ClearCache();
+
+  return std::move(n);
+}
+

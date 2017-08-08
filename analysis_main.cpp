@@ -128,7 +128,7 @@ int main( int argc, char* argv[]) {
   std::cerr << "Calculating scalar values" << std::endl;
   std::ofstream fout("_output.json");
   fout << "{" << std::endl;
-  fout << "  \"NumNodes\": " << network.NumNodes() << ',' << std::endl;
+  fout << "  \"NumConnectedNodes\": " << network.NumConnectedNodes() << ',' << std::endl;
   fout << "  \"NumEdges\": " << network.NumEdges() << ',' << std::endl;
   fout << "  \"AverageDegree\": " << network.AverageDegree() << ',' << std::endl;
   fout << "  \"Assortativity\": " << network.PCC_k_knn() << ',' << std::endl;

@@ -7,7 +7,7 @@
 #include "network.hpp"
 
 size_t NumCommunities( const Network& net ) {
-  infomap::Infomap iwrapper("-2 -s 1234 --silent");
+  infomap::Infomap iwrapper("-2 -z -s 1234 --silent");
   // infomap::Infomap iwrapper("-2 --overlapping -s 1234"); // if I specify `overlapping`, a bus error occurs
   for( const Network::Link& l: net.m_links ) {
     iwrapper.addLink(l.m_node_id1, l.m_node_id2, l.m_weight);
@@ -40,7 +40,7 @@ int main( int argc, char* argv[]) {
   std::cerr << "loading input file" << std::endl;
   network.LoadFile(fin);
 
-  size_t num_egos = network.NumNodes();
+  size_t num_egos = network.NumConnectedNodes();
   if( argc == 3 ) {
     num_egos = static_cast<size_t>( std::atol(argv[2]) );
   }
@@ -50,9 +50,17 @@ int main( int argc, char* argv[]) {
   long count = 0;
   std::map<size_t,size_t> histo;
   for( size_t i=0; i<num_egos; i++) {
-    const Network egonet = network.EgocentricNetwork(i);
-    if( egonet.NumEdges() < 2 ) { continue; }
-    size_t nc = NumCommunities(egonet);
+    if( network.m_nodes[i].Degree() == 0 ) { continue; }
+    const Network ego_net = network.EgocentricNetworkWithoutEgo(i);
+    size_t nc;
+    if( ego_net.NumEdges() == 0 ) {
+      nc = ego_net.m_nodes.size();
+    }
+    else {
+      const Network ego_net_c = ego_net.PruneIsolates();
+      size_t num_isolates = ego_net.m_nodes.size() - ego_net_c.m_nodes.size();
+      nc = NumCommunities(ego_net_c) + num_isolates;
+    }
     sum += nc;
     count += 1;
     CountHistogram(histo, nc);
