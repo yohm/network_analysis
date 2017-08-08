@@ -1,4 +1,4 @@
-OPT ?= -O2 -Wall -std=c++11
+OPT ?= -O2 -Wall -std=c++11 -Wno-deprecated-register
 
 all: analyzer.out  egonet_com.out
 
