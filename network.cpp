@@ -664,7 +664,7 @@ Network Network::EgocentricNetwork(size_t i) const {
   }
   n.ClearCache();
 
-  return std::move(n);
+  return n;
 }
 
 Network Network::EgocentricNetworkWithoutEgo(size_t i) const {
@@ -695,7 +695,7 @@ Network Network::EgocentricNetworkWithoutEgo(size_t i) const {
   }
   n.ClearCache();
 
-  return std::move(n);
+  return n;
 }
 
 Network Network::PruneIsolates() const {
@@ -721,6 +721,6 @@ Network Network::PruneIsolates() const {
   }
   n.ClearCache();
 
-  return std::move(n);
+  return n;
 }
 
