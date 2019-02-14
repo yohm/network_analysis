@@ -16,7 +16,7 @@ def findCommunities(G):
     for n in sorted( G.nodes(), key=lambda x: G.degree(x) ):
         mapping[n] = len(mapping)
     G2 = nx.relabel_nodes(G, mapping, copy=True)
-    for e in G2.edges_iter(data='weight'):
+    for e in G2.edges(data='weight'):
         infomapWrapper.addLink(*e)
 
     infomapWrapper.run();
