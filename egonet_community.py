@@ -33,7 +33,7 @@ def findCommunities(G):
     for n in G.nodes():
         if not n in communities:
             communities[n] = -1
-    nx.set_node_attributes(G, 'community', communities)
+    nx.set_node_attributes(G, name='community', values=communities)
     return tree.numTopModules()
 
 def numCommunitiesEgoCentricNetwork(G, ego):
@@ -62,7 +62,7 @@ def drawNetwork(G):
     # set node border color to the darker shade
 
     # Print node labels separately instead
-    for n in G.nodes_iter():
+    for n in G.nodes():
         plt.annotate(n,
             xy = pos[n],
             textcoords = 'offset points',
