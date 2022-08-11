@@ -1,6 +1,7 @@
 import argparse, os.path
 import matplotlib
 matplotlib.use('Agg')
+import numpy as np
 import matplotlib.pyplot as plt
 
 parser = argparse.ArgumentParser(description='plot the file')
@@ -23,10 +24,12 @@ names = tuple(args.columns.split(','))
 cols = tuple([int(x) for x in names])
 for infile in args.datfile:
     label = "%s%s" % (os.path.basename(infile), cols)
-    plt.plotfile(infile,
-            cols=cols, names=names,
-            delimiter=args.delimiter, marker=args.marker, linestyle=args.linestyle,
-            label=label)
+    x,y = np.loadtxt(infile, usecols=cols, delimiter=args.delimiter, unpack=True)
+    plt.plot(x, y, marker=args.marker, linestyle=args.linestyle, label=label)
+    # plt.plotfile(infile,
+    #         cols=cols, names=names,
+    #         delimiter=args.delimiter, marker=args.marker, linestyle=args.linestyle,
+    #         label=label)
 if args.xlabel:
     plt.xlabel(args.xlabel)
 if args.ylabel:

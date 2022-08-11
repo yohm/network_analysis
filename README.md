@@ -68,7 +68,19 @@ env CXX=g++-5 OPT='-O2 -fopenmp -std=c++11' make
 Also make infomap.
 
 ```
-cd infomap && make && make lib
+cd infomap && make && make lib && make python
+```
+
+To build `python`, swig is required. If not installed, run
+
+```
+brew install swig
+```
+
+In addition to these, it is also required to install dependent packages:
+
+```
+pipenv install
 ```
 
 ## Running
