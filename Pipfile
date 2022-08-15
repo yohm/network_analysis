@@ -6,6 +6,8 @@ name = "pypi"
 [packages]
 numpy = "*"
 matplotlib = "3.0"
+networkx = "*"
+pipenv = "*"
 
 [dev-packages]
 
